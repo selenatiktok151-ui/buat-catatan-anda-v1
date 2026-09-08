@@ -1,393 +1,746 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORET+</title>
-    <!-- Tailwind CSS CDN -->
+    <title>CORET+ - Catatan Modern</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#4f46e5',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts for Typography options -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Cinzel:wght@500;700&family=Comic+Neue:wght@700&family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;1,400&family=VT323&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Comic+Neue:wght@700&family=Courier+Prime&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&family=Merriweather&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* Font Family Definitions */
-        .font-klasik { font-family: 'Times New Roman', Times, serif; }
-        .font-italic { font-family: 'Playfair Display', serif; font-style: italic; }
+        /* Font Family Classes */
         .font-modern { font-family: 'Inter', sans-serif; }
-        .font-elegan { font-family: 'Cinzel', serif; }
+        .font-klasik { font-family: 'Courier Prime', monospace; }
+        .font-italic { font-family: 'Inter', sans-serif; font-style: italic; }
+        .font-elegan { font-family: 'Playfair Display', serif; }
         .font-cartoon { font-family: 'Comic Neue', cursive; }
         .font-tangan { font-family: 'Caveat', cursive; font-size: 1.25rem; }
 
-        /* Themes CSS */
-        .theme-polos { background-color: #ffffff; color: #1f2937; }
-        .dark .theme-polos { background-color: #111827; color: #f3f4f6; }
+        /* Themes */
+        .theme-polos {
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        .dark .theme-polos {
+            background-color: #111827;
+            color: #f3f4f6;
+        }
 
         .theme-buku {
-            background-color: #fdfbf7;
-            background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
-            background-size: 100% 28px;
+            background-color: #fefcbf;
+            background-image: repeating-linear-gradient(#fefcbf 0px, #fefcbf 27px, #e2e8f0 28px);
+            color: #1a202c;
             line-height: 28px;
-            color: #2d3748;
-        }
-        .dark .theme-buku {
-            background-color: #1a202c;
-            background-image: linear-gradient(#2d3748 1px, transparent 1px);
-            color: #e2e8f0;
         }
 
         .theme-kusut {
-            background-color: #f4ecd8;
-            background-image: radial-gradient(#d6c7a1 15%, transparent 16%), radial-gradient(#d6c7a1 15%, transparent 16%);
+            background-color: #f7fafc;
+            background-image: radial-gradient(#e2e8f0 15%, transparent 16%), radial-gradient(#cbd5e0 15%, transparent 16%);
             background-size: 60px 60px;
             background-position: 0 0, 30px 30px;
-            color: #3c2f2f;
+            color: #2d3748;
         }
 
         .theme-kuno {
-            background-color: #e8d8b7;
-            border: 12px solid #8c6d46;
-            color: #3a2510;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.3);
+            background-color: #f4e4bc;
+            color: #432818;
+            font-family: 'Merriweather', serif;
+            box-shadow: inset 0 0 100px rgba(111, 78, 55, 0.3);
         }
 
         .theme-papan {
-            background-color: #22382b;
-            color: #f0fdf4;
-            border: 8px solid #5c3a21;
-            font-family: 'Comic Neue', cursive;
+            background-color: #1c3127;
+            color: #f7fafc;
+            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8);
         }
 
-        /* Heading & Text Hierarchy Styling inside Editor Canvas */
-        #editor h1 { font-size: 2.25rem; font-weight: 800; line-height: 1.25; margin-top: 0.6em; margin-bottom: 0.3em; }
-        #editor h2 { font-size: 1.75rem; font-weight: 700; line-height: 1.3; margin-top: 0.6em; margin-bottom: 0.3em; }
-        #editor h3 { font-size: 1.35rem; font-weight: 600; line-height: 1.35; margin-top: 0.5em; margin-bottom: 0.25em; }
-        #editor h4 { font-size: 1.15rem; font-weight: 600; line-height: 1.4; margin-top: 0.5em; margin-bottom: 0.25em; }
-        #editor h5 { font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.4em; margin-bottom: 0.2em; }
-        #editor h6 { font-size: 0.875rem; font-weight: 600; opacity: 0.8; margin-top: 0.4em; margin-bottom: 0.2em; }
-        #editor p { margin-bottom: 0.5em; }
+        #editor.has-custom-bg {
+            background-color: rgba(255, 255, 255, 0.85) !important;
+            backdrop-filter: blur(2px);
+        }
+        .dark #editor.has-custom-bg {
+            background-color: rgba(17, 24, 39, 0.85) !important;
+            backdrop-filter: blur(2px);
+        }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.5); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(107, 114, 128, 0.8); }
+        /* Editor Placeholder Styling */
+        #editor[data-placeholder]:empty:before {
+            content: attr(data-placeholder);
+            color: #9ca3af;
+            font-style: italic;
+            pointer-events: none;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        /* Override Tailwind Preflight Styles for Headings in Editor */
+        #editor h1 {
+            font-size: 2.25rem !important;
+            font-weight: 800 !important;
+            line-height: 1.25 !important;
+            margin-top: 0.75rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+        #editor h2 {
+            font-size: 1.75rem !important;
+            font-weight: 700 !important;
+            line-height: 1.3 !important;
+            margin-top: 0.65rem !important;
+            margin-bottom: 0.4rem !important;
+        }
+        #editor h3 {
+            font-size: 1.35rem !important;
+            font-weight: 600 !important;
+            line-height: 1.4 !important;
+            margin-top: 0.55rem !important;
+            margin-bottom: 0.35rem !important;
+        }
+        #editor h4 {
+            font-size: 1.15rem !important;
+            font-weight: 600 !important;
+            line-height: 1.4 !important;
+            margin-top: 0.45rem !important;
+            margin-bottom: 0.3rem !important;
+        }
+        #editor h5 {
+            font-size: 1rem !important;
+            font-weight: 600 !important;
+            line-height: 1.5 !important;
+            margin-top: 0.35rem !important;
+            margin-bottom: 0.25rem !important;
+        }
+        #editor h6 {
+            font-size: 0.875rem !important;
+            font-weight: 600 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.05em !important;
+            margin-top: 0.25rem !important;
+            margin-bottom: 0.2rem !important;
+        }
+        #editor p {
+            margin-bottom: 0.5rem;
+        }
+
+        #editor {
+            position: relative;
+            min-height: 420px;
+        }
+
+        .image-wrapper {
+            position: relative;
+            display: inline-block;
+            user-select: none;
+            touch-action: none;
+            vertical-align: top;
+        }
+
+        .image-wrapper.floating {
+            position: absolute;
+            z-index: 10;
+        }
+
+        .image-wrapper:hover,
+        .image-wrapper.selected {
+            outline: 2px dashed #4f46e5;
+            outline-offset: 3px;
+        }
+
+        /* Resize Handles on Image Border */
+        .resize-handle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #4f46e5;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            z-index: 25;
+            display: none;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .image-wrapper:hover .resize-handle,
+        .image-wrapper:focus-within .resize-handle {
+            display: block;
+        }
+
+        .resize-handle-se { bottom: -5px; right: -5px; cursor: se-resize; }
+        .resize-handle-sw { bottom: -5px; left: -5px; cursor: sw-resize; }
+        .resize-handle-ne { top: -5px; right: -5px; cursor: ne-resize; }
+        .resize-handle-nw { top: -5px; left: -5px; cursor: nw-resize; }
+        .resize-handle-e  { top: calc(50% - 5px); right: -5px; cursor: e-resize; }
+        .resize-handle-s  { bottom: -5px; left: calc(50% - 5px); cursor: s-resize; }
+
+        .image-wrapper:hover .image-controls,
+        .image-wrapper:focus-within .image-controls {
+            display: flex !important;
+        }
+
+        .image-wrapper.is-dragging {
+            z-index: 100 !important;
+            opacity: 0.9;
+            transform: scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.4), 0 10px 10px -5px rgba(79, 70, 229, 0.2);
+            outline: 2px dashed #4f46e5 !important;
+            cursor: grabbing !important;
+        }
+
+        .image-wrapper.long-press-ready {
+            outline: 2px solid #6366f1 !important;
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+            transition: transform 0.15s ease;
+            transform: scale(1.01);
+        }
     </style>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 h-screen flex flex-col font-modern overflow-hidden transition-colors duration-200">
+<body class="h-full bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-modern flex flex-col antialiased transition-colors duration-200 select-none">
 
-    <!-- Top Menu Header -->
-    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 select-none">
-        <div class="flex items-center justify-between px-3 py-1.5 text-xs border-b border-gray-100 dark:border-gray-700/50">
-            <!-- App Logo & Menus -->
-            <div class="flex items-center space-x-2 sm:space-x-3">
-                <div class="flex items-center font-bold text-indigo-600 dark:text-indigo-400 text-sm tracking-wider mr-1 sm:mr-2 select-none">
-                    <i data-lucide="edit-3" class="w-4 h-4 mr-1"></i>
-                    <span>CORET+</span>
+    <!-- Top Header Navigation Bar -->
+    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-3 py-2 flex items-center justify-between shadow-sm z-30">
+        <div class="flex items-center space-x-2">
+            <!-- App Logo / Title -->
+            <div class="flex items-center space-x-2 mr-3">
+                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-black text-lg shadow-md">
+                    C+
                 </div>
-
-                <!-- File Menu Dropdown -->
-                <div class="relative">
-                    <button onclick="toggleDropdown(event, 'file-dropdown')" class="hover:bg-gray-100 dark:hover:bg-gray-700 active:bg-gray-200 dark:active:bg-gray-600 px-2.5 py-1.5 rounded-md cursor-pointer flex items-center gap-1 font-medium select-none transition-colors" id="menu-file-btn">
-                        <span data-i18n="file">File</span>
-                        <i data-lucide="chevron-down" class="w-3 h-3 opacity-60"></i>
-                    </button>
-                    <div id="file-dropdown" class="dropdown-menu absolute left-0 mt-1.5 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 hidden z-50 py-1 transition-all animate-in fade-in zoom-in-95 duration-100">
-                        <button onclick="createNewTab(); closeAllDropdowns();" class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between text-xs">
-                            <span class="flex items-center"><i data-lucide="file-plus" class="w-3.5 h-3.5 mr-2 text-indigo-500"></i><span data-i18n="newTab">New Tab</span></span>
-                            <span class="text-[10px] text-gray-400 font-mono">Ctrl+Alt+N</span>
-                        </button>
-                        <button onclick="saveFile(); closeAllDropdowns();" class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between text-xs">
-                            <span class="flex items-center"><i data-lucide="save" class="w-3.5 h-3.5 mr-2 text-green-500"></i><span data-i18n="save">Save</span></span>
-                            <span class="text-[10px] text-gray-400 font-mono">Ctrl+S</span>
-                        </button>
-                        <hr class="my-1 border-gray-200 dark:border-gray-700">
-                        <button onclick="exitApp(); closeAllDropdowns();" class="w-full text-left px-3 py-2 hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 dark:text-red-400 flex items-center text-xs">
-                            <i data-lucide="power" class="w-3.5 h-3.5 mr-2"></i><span data-i18n="exit">Exit</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Edit Menu Dropdown -->
-                <div class="relative">
-                    <button onclick="toggleDropdown(event, 'edit-dropdown')" class="hover:bg-gray-100 dark:hover:bg-gray-700 active:bg-gray-200 dark:active:bg-gray-600 px-2.5 py-1.5 rounded-md cursor-pointer flex items-center gap-1 font-medium select-none transition-colors" id="menu-edit-btn">
-                        <span data-i18n="edit">Edit</span>
-                        <i data-lucide="chevron-down" class="w-3 h-3 opacity-60"></i>
-                    </button>
-                    <div id="edit-dropdown" class="dropdown-menu absolute left-0 mt-1.5 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 hidden z-50 py-1 transition-all animate-in fade-in zoom-in-95 duration-100">
-                        <button onclick="execCmd('undo'); closeAllDropdowns();" class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between text-xs">
-                            <span class="flex items-center"><i data-lucide="undo" class="w-3.5 h-3.5 mr-2 text-amber-500"></i><span data-i18n="undo">Undo</span></span>
-                            <span class="text-[10px] text-gray-400 font-mono">Ctrl+Z</span>
-                        </button>
-                        <button onclick="execCmd('redo'); closeAllDropdowns();" class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-between text-xs">
-                            <span class="flex items-center"><i data-lucide="redo" class="w-3.5 h-3.5 mr-2 text-amber-500"></i><span data-i18n="redo">Redo</span></span>
-                            <span class="text-[10px] text-gray-400 font-mono">Ctrl+Y</span>
-                        </button>
-                        <button onclick="clearFormatting(); closeAllDropdowns();" class="w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center text-xs text-gray-700 dark:text-gray-300">
-                            <i data-lucide="eraser" class="w-3.5 h-3.5 mr-2 text-red-500"></i><span data-i18n="clearFormatting">Format Normal</span>
-                        </button>
-                        <hr class="my-1 border-gray-200 dark:border-gray-700">
-                        <button onclick="clearAllText(); closeAllDropdowns();" class="w-full text-left px-3 py-2 hover:bg-red-50 dark:hover:bg-red-950/30 text-red-600 dark:text-red-400 flex items-center text-xs">
-                            <i data-lucide="trash-2" class="w-3.5 h-3.5 mr-2"></i><span data-i18n="clearAll">Clear All</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Settings Modal Trigger -->
-                <button onclick="toggleSettingsModal(true); closeAllDropdowns();" class="hover:bg-gray-100 dark:hover:bg-gray-700 active:bg-gray-200 dark:active:bg-gray-600 px-2.5 py-1.5 rounded-md flex items-center gap-1.5 cursor-pointer font-medium select-none transition-colors">
-                    <i data-lucide="settings" class="w-3.5 h-3.5 text-indigo-500"></i>
-                    <span data-i18n="settings">Pengaturan</span>
-                </button>
+                <span class="font-bold text-lg tracking-wider bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hidden sm:inline">CORET+</span>
             </div>
 
-            <!-- Action Controls Right -->
-            <div class="flex items-center space-x-2">
-                <!-- Checklist Toggle Button -->
-                <button onclick="insertChecklist()" class="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition" title="Insert Checklist">
-                    <i data-lucide="check-square" class="w-4 h-4 text-indigo-500"></i>
+            <!-- Dropdown Menu: FILE -->
+            <div class="relative">
+                <button onclick="toggleDropdown('dropdown-file')" class="px-2.5 py-1 text-xs font-semibold rounded hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-1">
+                    <span data-i18n="file">File</span>
+                    <i class="fa-solid font-xs fa-chevron-down text-[10px] opacity-70"></i>
                 </button>
-                <!-- Dark / Light Mode Toggle -->
-                <button id="theme-toggle-btn" onclick="toggleDarkMode()" class="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition" title="Ganti Mode Terang/Gelap">
-                    <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
-                    <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-indigo-600"></i>
-                </button>
-                <!-- New Tab Plus Icon Button -->
-                <button onclick="createNewTab()" class="p-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded transition" title="New Tab">
-                    <i data-lucide="plus" class="w-4 h-4"></i>
-                </button>
+                <div id="dropdown-file" class="hidden absolute left-0 mt-1 w-44 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-1 z-50">
+                    <button onclick="addNewTab(); closeAllDropdowns();" class="w-full text-left px-4 py-2 text-xs hover:bg-indigo-50 dark:hover:bg-indigo-900/40 flex items-center justify-between">
+                        <span data-i18n="newTab"><i class="fa-solid fa-plus mr-2"></i>Tab Baru</span>
+                    </button>
+                    <button onclick="saveFile(); closeAllDropdowns();" class="w-full text-left px-4 py-2 text-xs hover:bg-indigo-50 dark:hover:bg-indigo-900/40 flex items-center justify-between">
+                        <span><i class="fa-solid fa-floppy-disk mr-2"></i><span data-i18n="save">Simpan</span></span>
+                        <span class="text-[10px] opacity-50">Ctrl+S</span>
+                    </button>
+                    <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
+                    <button onclick="triggerExit(); closeAllDropdowns();" class="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center">
+                        <i class="fa-solid fa-right-from-bracket mr-2"></i>
+                        <span data-i18n="exit">Keluar</span>
+                    </button>
+                </div>
             </div>
+
+            <!-- Dropdown Menu: EDIT -->
+            <div class="relative">
+                <button onclick="toggleDropdown('dropdown-edit')" class="px-2.5 py-1 text-xs font-semibold rounded hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-1">
+                    <span data-i18n="edit">Edit</span>
+                    <i class="fa-solid font-xs fa-chevron-down text-[10px] opacity-70"></i>
+                </button>
+                <div id="dropdown-edit" class="hidden absolute left-0 mt-1 w-44 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-1 z-50">
+                    <button onclick="execCmd('undo'); closeAllDropdowns();" class="w-full text-left px-4 py-2 text-xs hover:bg-indigo-50 dark:hover:bg-indigo-900/40 flex items-center justify-between">
+                        <span><i class="fa-solid fa-rotate-left mr-2"></i><span data-i18n="undo">Undo</span></span>
+                        <span class="text-[10px] opacity-50">Ctrl+Z</span>
+                    </button>
+                    <button onclick="execCmd('redo'); closeAllDropdowns();" class="w-full text-left px-4 py-2 text-xs hover:bg-indigo-50 dark:hover:bg-indigo-900/40 flex items-center justify-between">
+                        <span><i class="fa-solid fa-rotate-right mr-2"></i><span data-i18n="redo">Redo</span></span>
+                        <span class="text-[10px] opacity-50">Ctrl+Y</span>
+                    </button>
+                    <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
+                    <button onclick="clearFormatting(); closeAllDropdowns();" class="w-full text-left px-4 py-2 text-xs hover:bg-indigo-50 dark:hover:bg-indigo-900/40 flex items-center">
+                        <i class="fa-solid fa-eraser mr-2"></i>
+                        <span data-i18n="clearFormatting">Format Normal</span>
+                    </button>
+                    <button onclick="confirmClearAll(); closeAllDropdowns();" class="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center">
+                        <i class="fa-solid fa-trash-can mr-2"></i>
+                        <span data-i18n="clearAll">Hapus Semua</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dropdown Menu: APLIKASI -->
+            <div class="relative">
+                <button onclick="toggleDropdown('dropdown-apps')" class="px-2.5 py-1 text-xs font-semibold rounded hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-1">
+                    <span data-i18n="apps">Aplikasi</span>
+                    <i class="fa-solid font-xs fa-chevron-down text-[10px] opacity-70"></i>
+                </button>
+                <div id="dropdown-apps" class="hidden absolute left-0 mt-1 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-1 z-50">
+                    <button onclick="openAppModal('calculator'); closeAllDropdowns();" class="w-full text-left px-4 py-2 text-xs hover:bg-indigo-50 dark:hover:bg-indigo-900/40 flex items-center">
+                        <i class="fa-solid fa-calculator mr-2 text-indigo-500"></i>
+                        <span data-i18n="appCalc">Kalkulator</span>
+                    </button>
+                    <button onclick="openAppModal('calendar'); closeAllDropdowns();" class="w-full text-left px-4 py-2 text-xs hover:bg-indigo-50 dark:hover:bg-indigo-900/40 flex items-center">
+                        <i class="fa-solid fa-calendar-days mr-2 text-emerald-500"></i>
+                        <span data-i18n="appCal">Kalender</span>
+                    </button>
+                    <button onclick="openAppModal('paint'); closeAllDropdowns();" class="w-full text-left px-4 py-2 text-xs hover:bg-indigo-50 dark:hover:bg-indigo-900/40 flex items-center">
+                        <i class="fa-solid fa-palette mr-2 text-amber-500"></i>
+                        <span data-i18n="appPaint">Paint</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Settings Button -->
+            <button onclick="openSettingsModal()" class="px-2.5 py-1 text-xs font-semibold rounded hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-1">
+                <i class="fa-solid fa-gear mr-1"></i>
+                <span data-i18n="settings">Pengaturan</span>
+            </button>
         </div>
 
-        <!-- Toolbar Formatting Bar -->
-        <div class="flex flex-wrap items-center gap-2 px-3 py-1.5 bg-gray-50 dark:bg-gray-800/60 overflow-x-auto border-t border-gray-100 dark:border-gray-700">
-            <!-- Text Style / Heading Hierarchy Selector -->
-            <div class="flex items-center space-x-1">
-                <span class="text-xs text-gray-400 mr-1 hidden sm:inline" data-i18n="textStyle">Gaya:</span>
-                <select id="text-style-select" onchange="changeBlockStyle(this.value)" class="text-xs bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-indigo-500 font-medium">
-                    <option value="p" selected data-i18n="styleBody">Body (Teks Normal)</option>
-                    <option value="h1" data-i18n="styleTitle">Title (H1)</option>
-                    <option value="h2" data-i18n="styleSubtitle">Subtitle (H2)</option>
-                    <option value="h3" data-i18n="styleHeading">Heading (H3)</option>
-                    <option value="h4" data-i18n="styleSubheading">Subheading (H4)</option>
-                    <option value="h5" data-i18n="styleSection">Section (H5)</option>
-                    <option value="h6" data-i18n="styleSubsection">Subsection (H6)</option>
-                </select>
-            </div>
+        <!-- Right Side Controls: Dark Mode & New Tab -->
+        <div class="flex items-center space-x-2">
+            <!-- Theme Mode Toggle (Light/Dark Icon) -->
+            <button onclick="toggleDarkMode()" id="dark-mode-btn" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-300 transition-colors" title="Toggle Mode">
+                <i class="fa-solid fa-moon text-base dark:hidden"></i>
+                <i class="fa-solid fa-sun text-base hidden dark:inline text-amber-400"></i>
+            </button>
 
-            <div class="h-4 w-[1px] bg-gray-300 dark:bg-gray-600 mx-1"></div>
-
-            <!-- Font Family Selection -->
-            <div class="flex items-center space-x-1">
-                <span class="text-xs text-gray-400 mr-1 hidden sm:inline" data-i18n="font">Font:</span>
-                <select id="font-family-select" onchange="changeFontFamily(this.value)" class="text-xs bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                    <option value="font-klasik">Klasik (Times)</option>
-                    <option value="font-italic">Italic (Playfair)</option>
-                    <option value="font-modern" selected>Modern (Inter)</option>
-                    <option value="font-elegan">Elegan (Cinzel)</option>
-                    <option value="font-cartoon">Cartoon (Comic)</option>
-                    <option value="font-tangan">Tulisan Tangan (Caveat)</option>
-                </select>
-            </div>
-
-            <!-- Font Size Selection -->
-            <div class="flex items-center space-x-1">
-                <span class="text-xs text-gray-400 mr-1 hidden sm:inline" data-i18n="fontSize">Ukuran:</span>
-                <select id="font-size-select" onchange="changeFontSize(this.value)" class="text-xs bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                    <option value="12px">12px</option>
-                    <option value="14px">14px</option>
-                    <option value="16px" selected>16px</option>
-                    <option value="18px">18px</option>
-                    <option value="20px">20px</option>
-                    <option value="24px">24px</option>
-                    <option value="28px">28px</option>
-                    <option value="32px">32px</option>
-                    <option value="40px">40px</option>
-                </select>
-            </div>
-
-            <div class="h-4 w-[1px] bg-gray-300 dark:bg-gray-600 mx-1"></div>
-
-            <!-- Text Formatting Buttons -->
-            <div class="flex items-center space-x-1">
-                <button onclick="execCmd('bold')" class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded font-bold text-xs w-7 h-7 flex items-center justify-center" title="Tebal (Bold)">B</button>
-                <button onclick="execCmd('italic')" class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded italic text-xs w-7 h-7 flex items-center justify-center" title="Miring (Italic)">I</button>
-                <button onclick="execCmd('underline')" class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded underline text-xs w-7 h-7 flex items-center justify-center" title="Garis Bawah (Underline)">U</button>
-                <button onclick="execCmd('strikeThrough')" class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded line-through text-xs w-7 h-7 flex items-center justify-center" title="Coret Teks (Strikethrough)">S</button>
-                <button onclick="toggleCaseTransform()" class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-xs font-semibold px-2 h-7 flex items-center justify-center" title="Ubah Kapitalisasi">Aa</button>
-                <button onclick="clearFormatting()" class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-xs px-2 h-7 flex items-center justify-center text-red-500 hover:text-red-600 dark:text-red-400 font-medium" title="Format Normal (Hapus Format Teks)">
-                    <i data-lucide="eraser" class="w-3.5 h-3.5 mr-1"></i><span data-i18n="clearFormatting">Normal</span>
-                </button>
-            </div>
-
-            <div class="h-4 w-[1px] bg-gray-300 dark:bg-gray-600 mx-1"></div>
-
-            <!-- Alignment Buttons -->
-            <div class="flex items-center space-x-1">
-                <button onclick="execCmd('justifyLeft')" class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded" title="Rata Kiri"><i data-lucide="align-left" class="w-3.5 h-3.5"></i></button>
-                <button onclick="execCmd('justifyCenter')" class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded" title="Rata Tengah"><i data-lucide="align-center" class="w-3.5 h-3.5"></i></button>
-                <button onclick="execCmd('justifyRight')" class="p-1.5 hover:bg-gray-200 dark:hover:bg-gray-700 rounded" title="Rata Kanan"><i data-lucide="align-right" class="w-3.5 h-3.5"></i></button>
-            </div>
-        </div>
-
-        <!-- Tab Bar -->
-        <div id="tab-bar" class="flex items-center gap-1 px-2 pt-1 bg-gray-200 dark:bg-gray-900 overflow-x-auto border-t border-gray-300 dark:border-gray-700">
-            <!-- Dynamic Tabs standard render here -->
+            <!-- New Tab Iconic Button -->
+            <button onclick="addNewTab()" class="p-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow transition-transform active:scale-95 flex items-center justify-center w-8 h-8" title="Tab Baru">
+                <i class="fa-solid fa-plus text-sm"></i>
+            </button>
         </div>
     </header>
 
-    <!-- Main Writing Workspace Area -->
-    <main class="flex-1 relative overflow-hidden flex flex-col p-2 sm:p-4 bg-gray-100 dark:bg-gray-900 transition-all" id="workspace-container">
-        <!-- Editor Canvas Paper Card -->
-        <div id="paper-editor-wrapper" class="w-full h-full max-w-5xl mx-auto rounded-lg shadow-lg flex flex-col overflow-hidden transition-all duration-300 theme-polos relative">
-            <!-- Editable Title -->
-            <div class="p-3 border-b border-gray-200/50 dark:border-gray-700/50 flex items-center">
-                <input type="text" id="note-title-input" oninput="updateTabTitle(this.value)" placeholder="Catatan Baru..." class="w-full bg-transparent font-bold text-base sm:text-lg focus:outline-none placeholder-gray-400">
+    <!-- Formatting Toolbar -->
+    <div class="bg-gray-50 dark:bg-gray-800/80 border-b border-gray-200 dark:border-gray-700 px-3 py-1.5 flex flex-wrap items-center gap-1.5 text-xs z-20 shadow-inner">
+        <!-- Text Hierarchy Selector -->
+        <div class="flex items-center space-x-1">
+            <span class="text-xs text-gray-400 mr-1 hidden sm:inline" data-i18n="textStyle">Gaya:</span>
+            <select id="text-style-select" onchange="changeBlockStyle(this.value)" class="text-xs bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                <option value="p" data-i18n="styleBody">Body (Teks Normal)</option>
+                <option value="h1" data-i18n="styleTitle">Title (H1)</option>
+                <option value="h2" data-i18n="styleSubtitle">Subtitle (H2)</option>
+                <option value="h3" data-i18n="styleHeading">Heading (H3)</option>
+                <option value="h4" data-i18n="styleSubheading">Subheading (H4)</option>
+                <option value="h5" data-i18n="styleSection">Section (H5)</option>
+                <option value="h6" data-i18n="styleSubsection">Subsection (H6)</option>
+            </select>
+        </div>
+
+        <div class="h-4 w-[1px] bg-gray-300 dark:bg-gray-600 mx-0.5"></div>
+
+        <!-- Font Family Selector -->
+        <div class="flex items-center space-x-1">
+            <span class="text-xs text-gray-400 mr-1 hidden sm:inline" data-i18n="font">Font:</span>
+            <select id="font-select" onchange="changeFontFamily(this.value)" class="text-xs bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                <option value="font-modern">Modern (Inter)</option>
+                <option value="font-klasik">Klasik (Monospace)</option>
+                <option value="font-italic">Italic</option>
+                <option value="font-elegan">Elegan (Serif)</option>
+                <option value="font-cartoon">Cartoon</option>
+                <option value="font-tangan">Tulisan Tangan</option>
+            </select>
+        </div>
+
+        <div class="h-4 w-[1px] bg-gray-300 dark:bg-gray-600 mx-0.5"></div>
+
+        <!-- Font Size Selector -->
+        <div class="flex items-center space-x-1">
+            <span class="text-xs text-gray-400 mr-1 hidden sm:inline" data-i18n="fontSize">Ukuran:</span>
+            <select id="font-size-select" onchange="changeFontSize(this.value)" class="text-xs bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                <option value="12px">12px</option>
+                <option value="14px">14px</option>
+                <option value="16px" selected>16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+                <option value="24px">24px</option>
+                <option value="28px">28px</option>
+                <option value="32px">32px</option>
+                <option value="40px">40px</option>
+            </select>
+        </div>
+
+        <div class="h-4 w-[1px] bg-gray-300 dark:bg-gray-600 mx-0.5"></div>
+
+        <!-- Font Color Selector -->
+        <div class="flex items-center space-x-1">
+            <span class="text-xs text-gray-400 mr-1 hidden sm:inline" data-i18n="fontColor">Warna:</span>
+            <div class="relative flex items-center">
+                <label for="font-color-picker" class="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded cursor-pointer flex items-center justify-center w-7 h-7" title="Pilih Warna Font">
+                    <span class="font-bold text-xs flex flex-col items-center">
+                        A
+                        <span id="font-color-indicator" class="w-4 h-1 bg-indigo-600 rounded-full mt-[-2px]"></span>
+                    </span>
+                </label>
+                <input type="color" id="font-color-picker" value="#4f46e5" onchange="changeFontColor(this.value)" class="sr-only">
+            </div>
+            <!-- Quick Preset Colors -->
+            <div class="hidden sm:flex items-center space-x-1">
+                <button onclick="changeFontColor('#000000')" class="w-4 h-4 rounded-full bg-black border border-gray-300 dark:border-gray-600 hover:scale-125 transition-transform" title="Hitam"></button>
+                <button onclick="changeFontColor('#ef4444')" class="w-4 h-4 rounded-full bg-red-500 hover:scale-125 transition-transform" title="Merah"></button>
+                <button onclick="changeFontColor('#3b82f6')" class="w-4 h-4 rounded-full bg-blue-500 hover:scale-125 transition-transform" title="Biru"></button>
+                <button onclick="changeFontColor('#10b981')" class="w-4 h-4 rounded-full bg-emerald-500 hover:scale-125 transition-transform" title="Hijau"></button>
+                <button onclick="changeFontColor('#f59e0b')" class="w-4 h-4 rounded-full bg-amber-500 hover:scale-125 transition-transform" title="Kuning/Oranye"></button>
+                <button onclick="changeFontColor('#8b5cf6')" class="w-4 h-4 rounded-full bg-purple-500 hover:scale-125 transition-transform" title="Ungu"></button>
+            </div>
+        </div>
+
+        <div class="h-4 w-[1px] bg-gray-300 dark:bg-gray-600 mx-0.5"></div>
+
+        <!-- Formatting Style Action Buttons -->
+        <div class="flex items-center space-x-1">
+            <button onclick="execCmd('bold')" class="w-7 h-7 font-bold hover:bg-gray-200 dark:hover:bg-gray-700 rounded flex items-center justify-center" title="Tebal (Bold)">B</button>
+            <button onclick="execCmd('italic')" class="w-7 h-7 italic hover:bg-gray-200 dark:hover:bg-gray-700 rounded flex items-center justify-center" title="Miring (Italic)">I</button>
+            <button onclick="execCmd('underline')" class="w-7 h-7 underline hover:bg-gray-200 dark:hover:bg-gray-700 rounded flex items-center justify-center" title="Garis Bawah (Underline)">U</button>
+            <button onclick="execCmd('strikeThrough')" class="w-7 h-7 line-through hover:bg-gray-200 dark:hover:bg-gray-700 rounded flex items-center justify-center" title="Coret Teks (Strikethrough)">S</button>
+            <button onclick="toggleCase()" class="w-7 h-7 hover:bg-gray-200 dark:hover:bg-gray-700 rounded flex items-center justify-center font-semibold" title="Ubah Kapitalisasi (Aa)">Aa</button>
+            <button onclick="clearFormatting()" class="w-7 h-7 hover:bg-gray-200 dark:hover:bg-gray-700 rounded flex items-center justify-center text-gray-600 dark:text-gray-300" title="Format Normal">
+                <i class="fa-solid fa-eraser"></i>
+            </button>
+        </div>
+
+        <div class="h-4 w-[1px] bg-gray-300 dark:bg-gray-600 mx-0.5"></div>
+
+        <!-- Checklist Insert Button -->
+        <button onclick="insertChecklist()" class="px-2 py-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded flex items-center space-x-1" title="Tambah Checklist">
+            <i class="fa-regular fa-square-check text-indigo-600 dark:text-indigo-400"></i>
+            <span class="text-xs">Checklist</span>
+        </button>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="bg-gray-200 dark:bg-gray-900 px-2 pt-2 flex items-center space-x-1 overflow-x-auto border-b border-gray-300 dark:border-gray-800" id="tab-container">
+        <!-- Dynamic tabs rendered by JS -->
+    </div>
+
+    <!-- Main Workspace Container -->
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 flex flex-col items-center justify-start relative" id="editor-wrapper">
+        <div class="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col flex-1 min-h-[500px] overflow-hidden transition-all duration-300 relative" id="note-card">
+            
+            <!-- Note Title Bar (Uses Placeholder) -->
+            <div class="px-6 pt-5 pb-2 border-b border-gray-100 dark:border-gray-700/50">
+                <input type="text" id="note-title-input" oninput="handleTitleInput(this.value)" placeholder="Catatan Baru..." class="w-full bg-transparent text-xl font-bold border-none outline-none focus:ring-0 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500">
             </div>
 
-            <!-- Content Editable Editor Container -->
-            <div id="editor" contenteditable="true" oninput="handleEditorInput()" class="flex-1 p-4 sm:p-6 focus:outline-none overflow-y-auto font-modern transition-all text-sm sm:text-base" spellcheck="false"></div>
-
-            <!-- Custom Background Image Overlay Container -->
-            <div id="custom-bg-overlay" class="absolute inset-0 pointer-events-none opacity-20 bg-cover bg-center hidden"></div>
+            <!-- Contenteditable Note Editor -->
+            <div id="editor" contenteditable="true" oninput="handleEditorInput()" class="flex-1 p-6 outline-none theme-polos font-modern overflow-y-auto text-base" data-placeholder="Mulai menulis catatan Anda di sini...">
+            </div>
         </div>
     </main>
 
-    <!-- Bottom Footer Status Bar -->
-    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-1 text-xs text-gray-500 dark:text-gray-400 flex justify-between items-center select-none">
-        <div class="flex items-center gap-4">
-            <span id="char-count">Karakter: 0</span>
-            <span id="word-count">Kata: 0</span>
+    <!-- Status Footer -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 px-4 py-1.5 text-xs text-gray-500 dark:text-gray-400 flex items-center justify-between z-20">
+        <div class="flex items-center space-x-4">
+            <span id="stat-chars"><span data-i18n="chars">Karakter: </span><strong id="char-count">0</strong></span>
+            <span id="stat-words"><span data-i18n="words">Kata: </span><strong id="word-count">0</strong></span>
         </div>
-        <div class="flex items-center gap-2">
-            <span id="save-status" class="text-green-500 font-medium flex items-center gap-1">
-                <i data-lucide="check-circle-2" class="w-3 h-3"></i> Tersimpan
-            </span>
+        <div id="save-status" class="text-emerald-600 dark:text-emerald-400 flex items-center space-x-1">
+            <i class="fa-solid fa-check text-[10px]"></i>
+            <span>Tersimpan</span>
         </div>
     </footer>
 
-    <!-- Custom Confirmation Modal Dialog -->
-    <div id="confirm-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden select-none">
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-sm p-5 border border-gray-200 dark:border-gray-700 animate-in fade-in zoom-in-95 duration-150">
-            <h3 id="confirm-modal-title" class="text-base font-bold text-gray-800 dark:text-gray-100 mb-2">Konfirmasi</h3>
-            <p id="confirm-modal-msg" class="text-xs text-gray-600 dark:text-gray-300 mb-5">Apakah Anda yakin?</p>
-            <div class="flex justify-end gap-2">
-                <button onclick="closeConfirmModal()" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg text-xs font-medium transition-colors">Batal</button>
-                <button id="confirm-modal-action-btn" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-medium transition-colors">Proses</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Settings Modal Dialog -->
-    <div id="settings-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md p-6 border border-gray-200 dark:border-gray-700 animate-in fade-in zoom-in-95 duration-150">
-            <div class="flex items-center justify-between pb-3 border-b border-gray-200 dark:border-gray-700">
-                <h3 class="text-lg font-bold flex items-center gap-2" data-i18n="settingsTitle">
-                    <i data-lucide="settings" class="w-5 h-5 text-indigo-500"></i> Pengaturan CORET+
-                </h3>
-                <button onclick="toggleSettingsModal(false)" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-                    <i data-lucide="x" class="w-5 h-5"></i>
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <h3 class="font-bold text-base" data-i18n="settingsTitle">Pengaturan CORET+</h3>
+                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
-
-            <div class="mt-4 space-y-5 text-sm max-h-[70vh] overflow-y-auto pr-1">
-                <!-- 1. Suara Section -->
+            
+            <div class="p-5 space-y-5 text-xs max-h-[75vh] overflow-y-auto">
+                <!-- Sound Effects Toggles -->
                 <div>
-                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                        <i data-lucide="volume-2" class="w-4 h-4 text-indigo-500"></i> <span data-i18n="soundEffects">Suara (Sound Effects)</span>
-                    </h4>
-                    <div class="grid grid-cols-2 gap-2 bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg border border-gray-200 dark:border-gray-700">
-                        <label class="flex items-center space-x-2 cursor-pointer">
-                            <input type="checkbox" id="sound-type" checked onchange="saveSettings()" class="rounded text-indigo-600 focus:ring-indigo-500">
+                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2" data-i18n="soundEffects">Suara (Sound Effects)</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center space-x-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded border border-gray-200 dark:border-gray-600 cursor-pointer">
+                            <input type="checkbox" id="sound-typing" checked class="rounded text-indigo-600">
                             <span data-i18n="soundType">Mengetik</span>
                         </label>
-                        <label class="flex items-center space-x-2 cursor-pointer">
-                            <input type="checkbox" id="sound-clear" checked onchange="saveSettings()" class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <label class="flex items-center space-x-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded border border-gray-200 dark:border-gray-600 cursor-pointer">
+                            <input type="checkbox" id="sound-clear" checked class="rounded text-indigo-600">
                             <span data-i18n="soundClear">Hapus Semua</span>
                         </label>
-                        <label class="flex items-center space-x-2 cursor-pointer">
-                            <input type="checkbox" id="sound-checklist" checked onchange="saveSettings()" class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <label class="flex items-center space-x-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded border border-gray-200 dark:border-gray-600 cursor-pointer">
+                            <input type="checkbox" id="sound-checklist" checked class="rounded text-indigo-600">
                             <span data-i18n="soundChecklist">Aktifkan Checklist</span>
                         </label>
-                        <label class="flex items-center space-x-2 cursor-pointer">
-                            <input type="checkbox" id="sound-system" checked onchange="saveSettings()" class="rounded text-indigo-600 focus:ring-indigo-500">
+                        <label class="flex items-center space-x-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded border border-gray-200 dark:border-gray-600 cursor-pointer">
+                            <input type="checkbox" id="sound-system" checked class="rounded text-indigo-600">
                             <span data-i18n="soundSystem">Sistem</span>
                         </label>
                     </div>
                 </div>
 
-                <!-- 2. Ganti Background Kustom -->
+                <!-- Theme Selection -->
                 <div>
-                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                        <i data-lucide="image" class="w-4 h-4 text-indigo-500"></i> <span data-i18n="customBg">Latar Belakang Kustom</span>
-                    </h4>
+                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2" data-i18n="theme">Ganti Tema Editor</h4>
+                    <select id="theme-selector" onchange="changeTheme(this.value)" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded p-2 focus:ring-1 focus:ring-indigo-500">
+                        <option value="polos">Polos (Default)</option>
+                        <option value="buku">Buku (Lined Paper)</option>
+                        <option value="kusut">Kertas Kusut</option>
+                        <option value="kuno">Kitab Kuno</option>
+                        <option value="papan">Papan Tulis (Chalkboard)</option>
+                    </select>
+                </div>
+
+                <!-- Custom Background Options -->
+                <div>
+                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2" data-i18n="customBg">Latar Belakang Kustom</h4>
                     <div class="space-y-2">
-                        <div class="flex gap-2">
-                            <input type="text" id="bg-url-input" placeholder="URL Gambar (misal: https://...)" onkeydown="if(event.key==='Enter') saveCustomBgUrl()" class="flex-1 text-xs px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                            <button onclick="saveCustomBgUrl()" class="px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-medium transition-colors flex items-center gap-1 shrink-0">
-                                <i data-lucide="save" class="w-3.5 h-3.5"></i> <span data-i18n="saveUrl">Simpan</span>
-                            </button>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="bg-url-input" placeholder="https://example.com/image.jpg" class="flex-1 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded p-2 focus:ring-1 focus:ring-indigo-500">
+                            <button onclick="applyCustomBgUrl()" class="px-3 py-2 bg-indigo-600 text-white rounded font-medium hover:bg-indigo-700 transition-colors" data-i18n="saveUrl">Simpan</button>
                         </div>
-                        <div class="flex items-center justify-between">
-                            <label class="cursor-pointer bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-indigo-100 flex items-center gap-1">
-                                <i data-lucide="upload" class="w-3.5 h-3.5"></i> <span data-i18n="uploadImage">Unggah dari File</span>
-                                <input type="file" id="bg-file-input" accept="image/*" class="hidden" onchange="handleBgFileUpload(event)">
-                            </label>
-                            <button onclick="removeCustomBg()" class="text-xs text-red-500 hover:underline" data-i18n="removeBg">Hapus Background</button>
+                        <div class="flex items-center space-x-2">
+                            <input type="file" id="bg-file-input" accept="image/*" onchange="applyCustomBgFile(this)" class="hidden">
+                            <button onclick="document.getElementById('bg-file-input').click()" class="flex-1 px-3 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded text-center" data-i18n="uploadImage">Unggah dari File</button>
+                            <button onclick="removeCustomBg()" class="px-3 py-2 bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400 rounded hover:bg-red-200" data-i18n="removeBg">Hapus BG</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. Ganti Tema -->
+                <!-- Language Selection -->
                 <div>
-                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                        <i data-lucide="palette" class="w-4 h-4 text-indigo-500"></i> <span data-i18n="theme">Ganti Tema Editor</span>
-                    </h4>
-                    <select id="theme-select" onchange="changeTheme(this.value)" class="w-full text-xs px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                        <option value="theme-polos">Polos (Standard Clean)</option>
-                        <option value="theme-buku">Buku (Lined Notebook)</option>
-                        <option value="theme-kusut">Kertas Kusut (Texture)</option>
-                        <option value="theme-kuno">Kitab Kuno (Vintage Parchment)</option>
-                        <option value="theme-papan">Papan Tulis (Chalkboard)</option>
-                    </select>
-                </div>
-
-                <!-- 4. Ganti Bahasa -->
-                <div>
-                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                        <i data-lucide="globe" class="w-4 h-4 text-indigo-500"></i> <span data-i18n="language">Ganti Bahasa</span>
-                    </h4>
-                    <select id="lang-select" onchange="changeLanguage(this.value)" class="w-full text-xs px-3 py-2 bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                        <option value="id">Bahasa Indonesia</option>
-                        <option value="en">English</option>
-                    </select>
+                    <h4 class="font-semibold text-gray-700 dark:text-gray-300 mb-2" data-i18n="language">Ganti Bahasa</h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="setLanguage('id')" class="px-3 py-2 border border-indigo-600 rounded text-center font-medium hover:bg-indigo-50 dark:hover:bg-indigo-900/30">Bahasa Indonesia</button>
+                        <button onclick="setLanguage('en')" class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded text-center hover:bg-gray-100 dark:hover:bg-gray-700">English</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="mt-6 text-right">
-                <button onclick="toggleSettingsModal(false)" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-lg text-xs font-medium" data-i18n="close">Tutup</button>
+            <div class="px-5 py-3 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+                <button onclick="closeSettingsModal()" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-xs font-semibold" data-i18n="close">Tutup</button>
             </div>
         </div>
     </div>
 
-    <!-- Exit Screen Overlay (Dapat diklik di mana saja untuk membuka kembali) -->
-    <div id="exit-overlay" onclick="restoreApp()" class="fixed inset-0 bg-gray-900/95 backdrop-blur-md z-50 flex flex-col items-center justify-center text-white cursor-pointer hidden transition-all duration-300">
-        <div class="text-center space-y-4 p-6 rounded-2xl bg-gray-800/90 border border-gray-700 max-w-md shadow-2xl hover:scale-105 transition-transform">
-            <div class="w-16 h-16 bg-indigo-600/20 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-2 border border-indigo-500/30">
-                <i data-lucide="power" class="w-8 h-8"></i>
+    <!-- Confirm Clear Modal -->
+    <div id="confirm-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-sm p-5 text-center">
+            <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full flex items-center justify-center mx-auto mb-3 text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
-            <h1 class="text-2xl font-bold tracking-wide" id="exit-overlay-title">CORET+ Telah Ditutup</h1>
-            <p class="text-sm text-gray-300" id="exit-overlay-desc">Klik di mana saja untuk membuka kembali aplikasi.</p>
-            <div class="inline-flex items-center gap-2 text-xs text-indigo-400 bg-indigo-950/60 px-3 py-1.5 rounded-full border border-indigo-800/50 mt-2">
-                <i data-lucide="mouse-pointer-click" class="w-4 h-4"></i>
-                <span id="exit-overlay-hint">Klik Sembarang Tempat Untuk Kembali</span>
+            <h3 class="font-bold text-base mb-1">Hapus Semua Teks?</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Tindakan ini akan menghapus seluruh isi catatan ini. Anda tidak dapat mengembalikannya secara langsung.</p>
+            <div class="flex items-center justify-center space-x-2">
+                <button onclick="closeConfirmModal()" class="px-4 py-1.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 rounded text-xs">Batal</button>
+                <button onclick="executeClearAll()" class="px-4 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-semibold">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exit Resume Overlay -->
+    <div id="exit-overlay" class="hidden fixed inset-0 bg-gray-900/90 backdrop-blur-md z-50 flex flex-col items-center justify-center text-white cursor-pointer select-none" onclick="resumeFromExit()">
+        <div class="text-center space-y-4 p-6">
+            <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-2xl font-black mx-auto shadow-2xl animate-bounce">
+                C+
+            </div>
+            <h2 class="text-2xl font-bold tracking-wider">CORET+ Ditutup</h2>
+            <p class="text-sm text-gray-300 max-w-sm">Klik atau ketuk di mana saja pada layar ini untuk melanjutkan menulis catatan Anda.</p>
+            <div class="pt-4">
+                <span class="inline-block px-4 py-2 bg-white/10 rounded-full text-xs border border-white/20">Klik di mana saja untuk kembali</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Modals: Calculator, Calendar, Paint -->
+    <!-- 1. Calculator Modal -->
+    <div id="modal-calculator" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-xs overflow-hidden">
+            <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between bg-gray-50 dark:bg-gray-800/80">
+                <span class="font-bold text-sm flex items-center"><i class="fa-solid fa-calculator text-indigo-500 mr-2"></i>Kalkulator</span>
+                <button onclick="closeAppModal('calculator')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-4 space-y-3">
+                <input type="text" id="calc-display" readonly value="0" class="w-full bg-gray-100 dark:bg-gray-900 text-right text-2xl font-mono px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 focus:outline-none">
+                <div class="grid grid-cols-4 gap-2 text-sm font-semibold">
+                    <button onclick="calcInput('C')" class="p-3 rounded bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-300 hover:opacity-80">AC</button>
+                    <button onclick="calcInput('DEL')" class="p-3 rounded bg-gray-200 dark:bg-gray-700 hover:opacity-80"><i class="fa-solid fa-backspace"></i></button>
+                    <button onclick="calcInput('%')" class="p-3 rounded bg-gray-200 dark:bg-gray-700 hover:opacity-80">%</button>
+                    <button onclick="calcInput('/')" class="p-3 rounded bg-indigo-600 text-white hover:opacity-90">÷</button>
+
+                    <button onclick="calcInput('7')" class="p-3 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200">7</button>
+                    <button onclick="calcInput('8')" class="p-3 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200">8</button>
+                    <button onclick="calcInput('9')" class="p-3 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200">9</button>
+                    <button onclick="calcInput('*')" class="p-3 rounded bg-indigo-600 text-white hover:opacity-90">×</button>
+
+                    <button onclick="calcInput('4')" class="p-3 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200">4</button>
+                    <button onclick="calcInput('5')" class="p-3 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200">5</button>
+                    <button onclick="calcInput('6')" class="p-3 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200">6</button>
+                    <button onclick="calcInput('-')" class="p-3 rounded bg-indigo-600 text-white hover:opacity-90">-</button>
+
+                    <button onclick="calcInput('1')" class="p-3 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200">1</button>
+                    <button onclick="calcInput('2')" class="p-3 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200">2</button>
+                    <button onclick="calcInput('3')" class="p-3 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200">3</button>
+                    <button onclick="calcInput('+')" class="p-3 rounded bg-indigo-600 text-white hover:opacity-90">+</button>
+
+                    <button onclick="calcInput('0')" class="p-3 col-span-2 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200">0</button>
+                    <button onclick="calcInput('.')" class="p-3 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200">.</button>
+                    <button onclick="calcInput('=')" class="p-3 rounded bg-emerald-600 text-white hover:opacity-90">=</button>
+                </div>
+                <button onclick="insertCalcResult()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-lg shadow">
+                    <i class="fa-solid fa-file-import mr-1"></i> Sisipkan ke Catatan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Calendar Modal -->
+    <div id="modal-calendar" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-sm overflow-hidden">
+            <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between bg-gray-50 dark:bg-gray-800/80">
+                <span class="font-bold text-sm flex items-center"><i class="fa-solid fa-calendar-days text-emerald-500 mr-2"></i>Kalender</span>
+                <button onclick="closeAppModal('calendar')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-4 space-y-3">
+                <div class="flex items-center justify-between text-sm font-bold">
+                    <button onclick="navigateCalendar(-1)" class="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"><i class="fa-solid fa-chevron-left"></i></button>
+                    <span id="calendar-month-year" class="text-indigo-600 dark:text-indigo-400"></span>
+                    <button onclick="navigateCalendar(1)" class="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <div class="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-gray-500">
+                    <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div><div>Kam</div><div>Jum</div><div>Sab</div>
+                </div>
+                <div id="calendar-days" class="grid grid-cols-7 gap-1 text-center text-xs">
+                    <!-- Dynamic Calendar Grid -->
+                </div>
+                <div class="pt-2 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center text-xs">
+                    <span id="selected-date-label" class="text-gray-500 italic">Pilih tanggal...</span>
+                    <button onclick="insertSelectedDate()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded shadow">
+                        <i class="fa-solid fa-plus mr-1"></i> Sisipkan Tanggal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Paint Modal -->
+    <div id="modal-paint" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-xl overflow-hidden flex flex-col">
+            <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between bg-gray-50 dark:bg-gray-800/80">
+                <span class="font-bold text-sm flex items-center"><i class="fa-solid fa-palette text-amber-500 mr-2"></i>Paint & Draw</span>
+                <button onclick="closeAppModal('paint')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-4 space-y-3">
+                <!-- Paint Toolbar -->
+                <div class="flex flex-col gap-2 bg-gray-100 dark:bg-gray-700/50 p-2.5 rounded-lg text-xs">
+                    <!-- Tool Selection Buttons -->
+                    <div class="flex flex-wrap items-center justify-between gap-1.5 border-b border-gray-200 dark:border-gray-600 pb-2">
+                        <span class="font-semibold text-gray-600 dark:text-gray-300 mr-1">Alat:</span>
+                        <div class="flex flex-wrap items-center gap-1" id="paint-tools-container">
+                            <button onclick="setPaintTool('brush')" id="btn-paint-brush" class="px-2 py-1 bg-amber-500 text-white rounded font-medium shadow-sm flex items-center gap-1" title="Kuas Drawing">
+                                <i class="fa-solid fa-paint-brush"></i> Kuas
+                            </button>
+                            <button onclick="setPaintTool('fill')" id="btn-paint-fill" class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded font-medium flex items-center gap-1 hover:bg-gray-300 dark:hover:bg-gray-500" title="Ember Cat / Warna Area">
+                                <i class="fa-solid fa-fill-drip"></i> Cat
+                            </button>
+                            <button onclick="setPaintTool('eraser')" id="btn-paint-eraser" class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded font-medium flex items-center gap-1 hover:bg-gray-300 dark:hover:bg-gray-500" title="Penghapus">
+                                <i class="fa-solid fa-eraser"></i> Hapus
+                            </button>
+                            <div class="h-4 w-[1px] bg-gray-300 dark:bg-gray-500 mx-0.5"></div>
+                            <!-- Shapes -->
+                            <button onclick="setPaintTool('line')" id="btn-paint-line" class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded font-medium flex items-center gap-1 hover:bg-gray-300 dark:hover:bg-gray-500" title="Garis Lurus">
+                                <i class="fa-solid fa-slash"></i> Garis
+                            </button>
+                            <button onclick="setPaintTool('rectangle')" id="btn-paint-rectangle" class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded font-medium flex items-center gap-1 hover:bg-gray-300 dark:hover:bg-gray-500" title="Persegi">
+                                <i class="fa-regular fa-square"></i> Persegi
+                            </button>
+                            <button onclick="setPaintTool('circle')" id="btn-paint-circle" class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded font-medium flex items-center gap-1 hover:bg-gray-300 dark:hover:bg-gray-500" title="Lingkaran">
+                                <i class="fa-regular fa-circle"></i> Lingkaran
+                            </button>
+                            <button onclick="setPaintTool('triangle')" id="btn-paint-triangle" class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded font-medium flex items-center gap-1 hover:bg-gray-300 dark:hover:bg-gray-500" title="Segitiga">
+                                <i class="fa-solid fa-play -rotate-90 text-[10px]"></i> Segitiga
+                            </button>
+                            <button onclick="setPaintTool('star')" id="btn-paint-star" class="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded font-medium flex items-center gap-1 hover:bg-gray-300 dark:hover:bg-gray-500" title="Bintang">
+                                <i class="fa-regular fa-star"></i> Bintang
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Color & Brush Size Bar -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+                        <!-- Color Picker & Quick Palette -->
+                        <div class="flex items-center space-x-2">
+                            <label class="font-medium text-gray-600 dark:text-gray-300">Warna:</label>
+                            <input type="color" id="paint-color" value="#000000" onchange="syncPaintColor(this.value)" class="w-7 h-7 rounded cursor-pointer border border-gray-300 dark:border-gray-600 p-0 bg-transparent">
+                            
+                            <!-- Quick Color Swatches -->
+                            <div class="flex items-center space-x-1">
+                                <button onclick="setPaintColorPreset('#000000')" class="w-4 h-4 rounded-full bg-black border border-gray-300 hover:scale-125 transition-transform" title="Hitam"></button>
+                                <button onclick="setPaintColorPreset('#ffffff')" class="w-4 h-4 rounded-full bg-white border border-gray-300 hover:scale-125 transition-transform" title="Putih"></button>
+                                <button onclick="setPaintColorPreset('#ef4444')" class="w-4 h-4 rounded-full bg-red-500 hover:scale-125 transition-transform" title="Merah"></button>
+                                <button onclick="setPaintColorPreset('#3b82f6')" class="w-4 h-4 rounded-full bg-blue-500 hover:scale-125 transition-transform" title="Biru"></button>
+                                <button onclick="setPaintColorPreset('#10b981')" class="w-4 h-4 rounded-full bg-emerald-500 hover:scale-125 transition-transform" title="Hijau"></button>
+                                <button onclick="setPaintColorPreset('#f59e0b')" class="w-4 h-4 rounded-full bg-amber-500 hover:scale-125 transition-transform" title="Kuning"></button>
+                                <button onclick="setPaintColorPreset('#8b5cf6')" class="w-4 h-4 rounded-full bg-purple-500 hover:scale-125 transition-transform" title="Ungu"></button>
+                                <button onclick="setPaintColorPreset('#ec4899')" class="w-4 h-4 rounded-full bg-pink-500 hover:scale-125 transition-transform" title="Pink"></button>
+                            </div>
+                        </div>
+
+                        <!-- Size & Options -->
+                        <div class="flex items-center space-x-3">
+                            <div class="flex items-center space-x-1">
+                                <label class="font-medium text-gray-600 dark:text-gray-300">Ukuran:</label>
+                                <input type="range" id="paint-brush-size" min="1" max="40" value="3" class="w-16 sm:w-20 accent-amber-500">
+                            </div>
+                            <label class="flex items-center space-x-1 cursor-pointer" title="Isi warna padat untuk bentuk">
+                                <input type="checkbox" id="paint-fill-shape" class="rounded text-amber-500">
+                                <span class="text-[11px] text-gray-600 dark:text-gray-300">Isi Padat</span>
+                            </label>
+                            <button onclick="clearPaintCanvas()" class="px-2 py-1 bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-300 rounded font-medium hover:bg-red-200">
+                                <i class="fa-solid fa-trash-can mr-1"></i>Bersihkan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drawing Canvas -->
+                <div class="border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden bg-white flex justify-center shadow-inner">
+                    <canvas id="paint-canvas" width="500" height="300" class="cursor-crosshair block max-w-full h-auto touch-none"></canvas>
+                </div>
+                <div class="flex justify-between items-center pt-1">
+                    <button onclick="downloadPaintImage()" class="px-3 py-1.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 text-xs font-semibold rounded">
+                        <i class="fa-solid fa-download mr-1"></i> Unduh PNG
+                    </button>
+                    <button onclick="insertPaintToNote()" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded shadow">
+                        <i class="fa-solid fa-file-import mr-1"></i> Sisipkan ke Catatan
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Internationalization Dictionary
         const i18nDict = {
             id: {
                 file: 'File',
@@ -399,6 +752,10 @@
                 redo: 'Redo',
                 clearFormatting: 'Format Normal',
                 clearAll: 'Hapus Semua',
+                apps: 'Aplikasi',
+                appCalc: 'Kalkulator',
+                appCal: 'Kalender',
+                appPaint: 'Paint',
                 settings: 'Pengaturan',
                 textStyle: 'Gaya:',
                 styleBody: 'Body (Teks Normal)',
@@ -410,6 +767,7 @@
                 styleSubsection: 'Subsection (H6)',
                 font: 'Font:',
                 fontSize: 'Ukuran:',
+                fontColor: 'Warna:',
                 settingsTitle: 'Pengaturan CORET+',
                 soundEffects: 'Suara (Sound Effects)',
                 soundType: 'Mengetik',
@@ -437,6 +795,10 @@
                 redo: 'Redo',
                 clearFormatting: 'Clear Formatting',
                 clearAll: 'Clear All',
+                apps: 'Apps',
+                appCalc: 'Calculator',
+                appCal: 'Calendar',
+                appPaint: 'Paint',
                 settings: 'Settings',
                 textStyle: 'Style:',
                 styleBody: 'Body (Normal Text)',
@@ -448,6 +810,7 @@
                 styleSubsection: 'Subsection (H6)',
                 font: 'Font:',
                 fontSize: 'Size:',
+                fontColor: 'Color:',
                 settingsTitle: 'CORET+ Settings',
                 soundEffects: 'Sound Effects',
                 soundType: 'Typing',
@@ -467,78 +830,33 @@
             }
         };
 
-        // State Management
+        // Application State
+        let currentLang = 'id';
         let tabs = [];
         let activeTabId = null;
-        let currentLanguage = 'id';
-        let currentFont = 'font-modern';
-        let currentTheme = 'theme-polos';
-        let customBgUrl = '';
+        let fileHandle = null;
+        let savedSelectionRange = null;
+
+        // Web Audio Synthesizer Engine
         let audioCtx = null;
-        let pendingConfirmAction = null;
 
-        // Toggle & Auto Close Dropdown Controllers
-        function toggleDropdown(event, dropdownId) {
-            if (event) event.stopPropagation();
-            playSynthesizedSound('system');
-            
-            const targetMenu = document.getElementById(dropdownId);
-            const isHidden = targetMenu ? targetMenu.classList.contains('hidden') : true;
-
-            closeAllDropdowns();
-
-            if (targetMenu && isHidden) {
-                targetMenu.classList.remove('hidden');
-            }
-        }
-
-        function closeAllDropdowns() {
-            document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                menu.classList.add('hidden');
-            });
-        }
-
-        // Global Event Listener for Closing Menus when Clicking Outside
-        document.addEventListener('click', (event) => {
-            if (!event.target.closest('#menu-file-btn') && 
-                !event.target.closest('#menu-edit-btn') && 
-                !event.target.closest('.dropdown-menu')) {
-                closeAllDropdowns();
-            }
-        });
-
-        // Web Audio Synthesizer for Sound Effects
-        function initAudioContext() {
+        function initAudio() {
             if (!audioCtx) {
-                const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
-                if (AudioCtxClass) {
-                    audioCtx = new AudioCtxClass();
-                }
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
-            if (audioCtx && audioCtx.state === 'suspended') {
+            if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
         }
 
-        // Attach user interaction listeners to unlock Web Audio API automatically
-        ['click', 'keydown', 'touchstart'].forEach(eventType => {
-            window.addEventListener(eventType, initAudioContext, { once: true });
-        });
-
         function playSynthesizedSound(type) {
             try {
-                initAudioContext();
+                // Check settings toggles
+                const soundToggle = document.getElementById(`sound-${type}`);
+                if (soundToggle && !soundToggle.checked) return;
+
+                initAudio();
                 if (!audioCtx) return;
-
-                const soundTypeChecked = document.getElementById('sound-type')?.checked ?? true;
-                const soundClearChecked = document.getElementById('sound-clear')?.checked ?? true;
-                const soundChecklistChecked = document.getElementById('sound-checklist')?.checked ?? true;
-                const soundSystemChecked = document.getElementById('sound-system')?.checked ?? true;
-
-                if (type === 'type' && !soundTypeChecked) return;
-                if (type === 'clear' && !soundClearChecked) return;
-                if (type === 'checklist' && !soundChecklistChecked) return;
-                if (type === 'system' && !soundSystemChecked) return;
 
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
@@ -549,334 +867,922 @@
 
                 if (type === 'type') {
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(380 + Math.random() * 220, now);
-                    gain.gain.setValueAtTime(0.06, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.frequency.setValueAtTime(600 + Math.random() * 200, now);
+                    gain.gain.setValueAtTime(0.03, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
                     osc.start(now);
-                    osc.stop(now + 0.05);
+                    osc.stop(now + 0.04);
                 } else if (type === 'checklist') {
                     osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(523.25, now); // C5
-                    osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.09); // E5
-                    gain.gain.setValueAtTime(0.12, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-                    osc.start(now);
-                    osc.stop(now + 0.1);
-                } else if (type === 'clear') {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(320, now);
-                    osc.frequency.exponentialRampToValueAtTime(70, now + 0.25);
-                    gain.gain.setValueAtTime(0.18, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-                    osc.start(now);
-                    osc.stop(now + 0.25);
-                } else if (type === 'system') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(587.33, now); // D5
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
                     gain.gain.setValueAtTime(0.08, now);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
                     osc.start(now);
                     osc.stop(now + 0.08);
+                } else if (type === 'clear') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(80, now + 0.2);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                } else if (type === 'system') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(520, now);
+                    gain.gain.setValueAtTime(0.04, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                    osc.start(now);
+                    osc.stop(now + 0.06);
                 }
             } catch (e) {
-                console.warn('Synthesizer Audio Error:', e);
+                // Audio fallback silence
             }
         }
 
-        // Custom Confirmation Modal Controller
-        function showConfirmModal(title, msg, confirmBtnText, onConfirm) {
+        // Apps Dropdown & Modal Logic
+        function openAppModal(appName) {
             playSynthesizedSound('system');
-            document.getElementById('confirm-modal-title').innerText = title;
-            document.getElementById('confirm-modal-msg').innerText = msg;
-            const actionBtn = document.getElementById('confirm-modal-action-btn');
-            actionBtn.innerText = confirmBtnText;
-            pendingConfirmAction = onConfirm;
-            document.getElementById('confirm-modal').classList.remove('hidden');
+            document.getElementById(`modal-${appName}`).classList.remove('hidden');
+            if (appName === 'calendar') {
+                renderCalendar();
+            } else if (appName === 'paint') {
+                initPaintCanvas();
+            }
         }
 
-        function closeConfirmModal() {
+        function closeAppModal(appName) {
             playSynthesizedSound('system');
-            document.getElementById('confirm-modal').classList.add('hidden');
-            pendingConfirmAction = null;
+            document.getElementById(`modal-${appName}`).classList.add('hidden');
         }
 
-        // Initialize Application
-        window.addEventListener('DOMContentLoaded', () => {
-            loadSavedState();
-            if (tabs.length === 0) {
-                createNewTab("");
+        // Calculator Logic
+        let calcVal = '0';
+        function calcInput(key) {
+            playSynthesizedSound('type');
+            const display = document.getElementById('calc-display');
+            if (key === 'C') {
+                calcVal = '0';
+            } else if (key === 'DEL') {
+                calcVal = calcVal.length > 1 ? calcVal.slice(0, -1) : '0';
+            } else if (key === '=') {
+                try {
+                    calcVal = String(eval(calcVal.replace(/×/g, '*').replace(/÷/g, '/')));
+                } catch(e) {
+                    calcVal = 'Error';
+                }
             } else {
-                renderTabs();
+                if (calcVal === '0' || calcVal === 'Error') {
+                    calcVal = key;
+                } else {
+                    calcVal += key;
+                }
+            }
+            display.value = calcVal;
+        }
+
+        function insertCalcResult() {
+            playSynthesizedSound('system');
+            const result = document.getElementById('calc-display').value;
+            insertTextAtCursor(` ${result} `);
+            closeAppModal('calculator');
+        }
+
+        // Calendar Logic
+        let calCurrentDate = new Date();
+        let calSelectedDate = new Date();
+
+        function renderCalendar() {
+            const year = calCurrentDate.getFullYear();
+            const month = calCurrentDate.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            document.getElementById('calendar-month-year').innerText = `${monthNames[month]} ${year}`;
+
+            const grid = document.getElementById('calendar-days');
+            grid.innerHTML = '';
+
+            for (let i = 0; i < firstDay; i++) {
+                grid.appendChild(document.createElement('div'));
+            }
+
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayEl = document.createElement('button');
+                dayEl.innerText = day;
+                const isToday = today.getDate() === day && today.getMonth() === month && today.getFullYear() === year;
+                const isSelected = calSelectedDate.getDate() === day && calSelectedDate.getMonth() === month && calSelectedDate.getFullYear() === year;
+
+                dayEl.className = `p-1.5 rounded-full font-medium transition-colors hover:bg-indigo-100 dark:hover:bg-indigo-900/40 ${
+                    isSelected ? 'bg-indigo-600 text-white font-bold' : isToday ? 'border border-indigo-600 text-indigo-600 dark:text-indigo-400 font-bold' : ''
+                }`;
+
+                dayEl.onclick = () => {
+                    calSelectedDate = new Date(year, month, day);
+                    renderCalendar();
+                    document.getElementById('selected-date-label').innerText = calSelectedDate.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                };
+
+                grid.appendChild(dayEl);
+            }
+        }
+
+        function navigateCalendar(dir) {
+            playSynthesizedSound('system');
+            calCurrentDate.setMonth(calCurrentDate.getMonth() + dir);
+            renderCalendar();
+        }
+
+        function insertSelectedDate() {
+            playSynthesizedSound('system');
+            const formatted = calSelectedDate.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            insertTextAtCursor(` [${formatted}] `);
+            closeAppModal('calendar');
+        }
+
+        // Paint Logic
+        let paintCanvas, paintCtx, isDrawing = false, paintTool = 'brush';
+        let paintStartX = 0, paintStartY = 0, paintSnapshot = null;
+
+        function initPaintCanvas() {
+            paintCanvas = document.getElementById('paint-canvas');
+            paintCtx = paintCanvas.getContext('2d', { willReadFrequently: true });
+            
+            // Mouse events
+            paintCanvas.onmousedown = startDrawing;
+            paintCanvas.onmousemove = draw;
+            paintCanvas.onmouseup = stopDrawing;
+            paintCanvas.onmouseleave = stopDrawing;
+
+            // Touch support
+            paintCanvas.ontouchstart = (e) => { 
+                if (e.touches.length === 1) {
+                    startDrawing(e.touches[0]); 
+                    e.preventDefault();
+                }
+            };
+            paintCanvas.ontouchmove = (e) => { 
+                if (e.touches.length === 1) {
+                    draw(e.touches[0]); 
+                    e.preventDefault();
+                }
+            };
+            paintCanvas.ontouchend = stopDrawing;
+        }
+
+        function setPaintTool(tool) {
+            playSynthesizedSound('system');
+            paintTool = tool;
+            
+            const toolButtons = ['brush', 'fill', 'eraser', 'line', 'rectangle', 'circle', 'triangle', 'star'];
+            toolButtons.forEach(t => {
+                const btn = document.getElementById(`btn-paint-${t}`);
+                if (btn) {
+                    if (t === tool) {
+                        btn.className = 'px-2 py-1 bg-amber-500 text-white rounded font-medium shadow-sm flex items-center gap-1';
+                    } else {
+                        btn.className = 'px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded font-medium flex items-center gap-1 hover:bg-gray-300 dark:hover:bg-gray-500';
+                    }
+                }
+            });
+        }
+
+        function setPaintColorPreset(hex) {
+            playSynthesizedSound('system');
+            const colorPicker = document.getElementById('paint-color');
+            if (colorPicker) {
+                colorPicker.value = hex;
+            }
+        }
+
+        function syncPaintColor(val) {
+            playSynthesizedSound('system');
+        }
+
+        function getCanvasCoords(e) {
+            const rect = paintCanvas.getBoundingClientRect();
+            const scaleX = paintCanvas.width / rect.width;
+            const scaleY = paintCanvas.height / rect.height;
+            return {
+                x: (e.clientX - rect.left) * scaleX,
+                y: (e.clientY - rect.top) * scaleY
+            };
+        }
+
+        function startDrawing(e) {
+            const coords = getCanvasCoords(e);
+            paintStartX = coords.x;
+            paintStartY = coords.y;
+
+            // Bucket fill tool
+            if (paintTool === 'fill') {
+                const color = document.getElementById('paint-color').value;
+                floodFillCanvas(Math.round(paintStartX), Math.round(paintStartY), color);
+                return;
+            }
+
+            isDrawing = true;
+            paintCtx.beginPath();
+            
+            const size = document.getElementById('paint-brush-size').value;
+            const color = document.getElementById('paint-color').value;
+            
+            paintCtx.lineWidth = size;
+            paintCtx.lineCap = 'round';
+            paintCtx.lineJoin = 'round';
+            paintCtx.strokeStyle = (paintTool === 'eraser') ? '#ffffff' : color;
+            paintCtx.fillStyle = color;
+
+            if (paintTool === 'brush' || paintTool === 'eraser') {
+                paintCtx.moveTo(coords.x, coords.y);
+            } else {
+                // Take snapshot for shape previewing
+                paintSnapshot = paintCtx.getImageData(0, 0, paintCanvas.width, paintCanvas.height);
+            }
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const coords = getCanvasCoords(e);
+
+            if (paintTool === 'brush' || paintTool === 'eraser') {
+                paintCtx.lineTo(coords.x, coords.y);
+                paintCtx.stroke();
+            } else if (['line', 'rectangle', 'circle', 'triangle', 'star'].includes(paintTool)) {
+                // Restore snapshot for clean dynamic shape rendering
+                if (paintSnapshot) {
+                    paintCtx.putImageData(paintSnapshot, 0, 0);
+                }
+                const isFilled = document.getElementById('paint-fill-shape').checked;
+                drawShape(paintCtx, paintTool, paintStartX, paintStartY, coords.x, coords.y, isFilled);
+            }
+        }
+
+        function stopDrawing() {
+            if (isDrawing) {
+                isDrawing = false;
+                paintSnapshot = null;
+            }
+        }
+
+        function drawShape(ctx, tool, x1, y1, x2, y2, isFilled) {
+            ctx.beginPath();
+            const width = x2 - x1;
+            const height = y2 - y1;
+
+            if (tool === 'line') {
+                ctx.moveTo(x1, y1);
+                ctx.lineTo(x2, y2);
+            } else if (tool === 'rectangle') {
+                ctx.rect(x1, y1, width, height);
+            } else if (tool === 'circle') {
+                const radius = Math.sqrt(width * width + height * height);
+                ctx.arc(x1, y1, radius, 0, 2 * Math.PI);
+            } else if (tool === 'triangle') {
+                ctx.moveTo(x1 + width / 2, y1);
+                ctx.lineTo(x1, y2);
+                ctx.lineTo(x2, y2);
+                ctx.closePath();
+            } else if (tool === 'star') {
+                const outerRadius = Math.sqrt(width * width + height * height);
+                const innerRadius = outerRadius / 2;
+                const points = 5;
+                let angle = (Math.PI / 2) * 3;
+                const step = Math.PI / points;
+
+                ctx.moveTo(x1 + Math.cos(angle) * outerRadius, y1 + Math.sin(angle) * outerRadius);
+                for (let i = 0; i < points; i++) {
+                    ctx.lineTo(x1 + Math.cos(angle) * outerRadius, y1 + Math.sin(angle) * outerRadius);
+                    angle += step;
+                    ctx.lineTo(x1 + Math.cos(angle) * innerRadius, y1 + Math.sin(angle) * innerRadius);
+                    angle += step;
+                }
+                ctx.closePath();
+            }
+
+            if (isFilled && tool !== 'line') {
+                ctx.fill();
+            }
+            ctx.stroke();
+        }
+
+        // Flood Fill / Paint Bucket Algorithm
+        function floodFillCanvas(startX, startY, hexColor) {
+            playSynthesizedSound('checklist');
+            const width = paintCanvas.width;
+            const height = paintCanvas.height;
+            if (startX < 0 || startX >= width || startY < 0 || startY >= height) return;
+
+            const imgData = paintCtx.getImageData(0, 0, width, height);
+            const data = imgData.data;
+
+            // Convert hex color to RGBA
+            const tempDiv = document.createElement('div');
+            tempDiv.style.color = hexColor;
+            document.body.appendChild(tempDiv);
+            const rgbStr = window.getComputedStyle(tempDiv).color;
+            document.body.removeChild(tempDiv);
+
+            let fillR = 0, fillG = 0, fillB = 0, fillA = 255;
+            const match = rgbStr.match(/\d+/g);
+            if (match) {
+                fillR = parseInt(match[0]);
+                fillG = parseInt(match[1]);
+                fillB = parseInt(match[2]);
+                if (match[3] !== undefined) fillA = Math.round(parseFloat(match[3]) * 255);
+            }
+
+            const startPos = (startY * width + startX) * 4;
+            const startR = data[startPos];
+            const startG = data[startPos + 1];
+            const startB = data[startPos + 2];
+            const startA = data[startPos + 3];
+
+            if (startR === fillR && startG === fillG && startB === fillB && startA === fillA) return;
+
+            const matchColor = (pos) => {
+                return Math.abs(data[pos] - startR) < 30 &&
+                       Math.abs(data[pos + 1] - startG) < 30 &&
+                       Math.abs(data[pos + 2] - startB) < 30 &&
+                       Math.abs(data[pos + 3] - startA) < 30;
+            };
+
+            const colorPixel = (pos) => {
+                data[pos] = fillR;
+                data[pos + 1] = fillG;
+                data[pos + 2] = fillB;
+                data[pos + 3] = fillA;
+            };
+
+            const stack = [[startX, startY]];
+
+            while (stack.length > 0) {
+                const [x, y] = stack.pop();
+                let currentPos = (y * width + x) * 4;
+
+                let curY = y;
+                while (curY >= 0 && matchColor(currentPos)) {
+                    curY--;
+                    currentPos -= width * 4;
+                }
+
+                curY++;
+                currentPos += width * 4;
+
+                let reachLeft = false;
+                let reachRight = false;
+
+                while (curY < height && matchColor(currentPos)) {
+                    colorPixel(currentPos);
+
+                    if (x > 0) {
+                        if (matchColor(currentPos - 4)) {
+                            if (!reachLeft) {
+                                stack.push([x - 1, curY]);
+                                reachLeft = true;
+                            }
+                        } else if (reachLeft) {
+                            reachLeft = false;
+                        }
+                    }
+
+                    if (x < width - 1) {
+                        if (matchColor(currentPos + 4)) {
+                            if (!reachRight) {
+                                stack.push([x + 1, curY]);
+                                reachRight = true;
+                            }
+                        } else if (reachRight) {
+                            reachRight = false;
+                        }
+                    }
+
+                    curY++;
+                    currentPos += width * 4;
+                }
+            }
+
+            paintCtx.putImageData(imgData, 0, 0);
+        }
+
+        function clearPaintCanvas() {
+            playSynthesizedSound('clear');
+            paintCtx.clearRect(0, 0, paintCanvas.width, paintCanvas.height);
+        }
+
+        function downloadPaintImage() {
+            playSynthesizedSound('system');
+            const link = document.createElement('a');
+            link.download = 'gambar_coret.png';
+            link.href = paintCanvas.toDataURL();
+            link.click();
+        }
+
+        function insertPaintToNote() {
+            playSynthesizedSound('system');
+            const dataUrl = paintCanvas.toDataURL();
+            const imgId = 'img_' + Date.now();
+            const wrapperId = 'wrap_' + Date.now();
+            
+            // Image Wrapper with Drag handle, Resize handles, and Mode Toggle (without image border)
+            const img = `<div id="${wrapperId}" class="image-wrapper floating inline-block my-2 relative group max-w-full rounded-lg" style="width: 280px; left: 20px; top: 20px;" contenteditable="false">
+                <div class="image-controls absolute -top-9 left-0 hidden group-hover:flex items-center space-x-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-md px-2 py-1 text-[11px] z-30 select-none">
+                    <span class="image-drag-handle cursor-move px-1 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400" title="Geser / Pindahkan Gambar"><i class="fa-solid fa-arrows-up-down-left-right"></i></span>
+                    <div class="h-3 w-[1px] bg-gray-300 dark:bg-gray-600"></div>
+                    <button onclick="toggleImageMode('${wrapperId}')" class="btn-toggle-mode hover:bg-gray-100 dark:hover:bg-gray-700 px-1.5 py-0.5 rounded font-medium text-xs text-indigo-600 dark:text-indigo-400" title="Ubah Posisi Teks/Bebas"><i class="fa-solid fa-up-down-left-right mr-1"></i>Bebas</button>
+                    <div class="h-3 w-[1px] bg-gray-300 dark:bg-gray-600"></div>
+                    <button onclick="resizeImage('${imgId}', 150)" class="hover:bg-gray-100 dark:hover:bg-gray-700 px-1 py-0.5 rounded font-bold">Kecil</button>
+                    <button onclick="resizeImage('${imgId}', 300)" class="hover:bg-gray-100 dark:hover:bg-gray-700 px-1 py-0.5 rounded font-bold">Sedang</button>
+                    <button onclick="resizeImage('${imgId}', '100%')" class="hover:bg-gray-100 dark:hover:bg-gray-700 px-1 py-0.5 rounded font-bold">Penuh</button>
+                    <button onclick="this.closest('.image-wrapper').remove(); handleEditorInput();" class="text-red-500 hover:bg-red-50 dark:hover:bg-red-900/40 px-1.5 py-0.5 rounded" title="Hapus"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+                
+                <img id="${imgId}" src="${dataUrl}" class="note-image w-full h-auto rounded-lg block pointer-events-none" />
+                
+                <!-- Border Resize Handles -->
+                <div class="resize-handle resize-handle-nw" data-handle="nw"></div>
+                <div class="resize-handle resize-handle-ne" data-handle="ne"></div>
+                <div class="resize-handle resize-handle-sw" data-handle="sw"></div>
+                <div class="resize-handle resize-handle-se" data-handle="se"></div>
+                <div class="resize-handle resize-handle-e" data-handle="e"></div>
+                <div class="resize-handle resize-handle-s" data-handle="s"></div>
+            </div>&nbsp;`;
+
+            const editor = document.getElementById('editor');
+            editor.focus();
+            restoreEditorSelection();
+            document.execCommand('insertHTML', false, img);
+            handleEditorInput();
+            closeAppModal('paint');
+        }
+
+        function toggleImageMode(wrapperId) {
+            playSynthesizedSound('system');
+            const wrapper = document.getElementById(wrapperId);
+            if (!wrapper) return;
+            
+            const btn = wrapper.querySelector('.btn-toggle-mode');
+            if (wrapper.classList.contains('floating')) {
+                wrapper.classList.remove('floating');
+                wrapper.style.left = '';
+                wrapper.style.top = '';
+                if (btn) btn.innerHTML = '<i class="fa-solid fa-align-left mr-1"></i>Teks';
+            } else {
+                wrapper.classList.add('floating');
+                if (!wrapper.style.left) wrapper.style.left = '20px';
+                if (!wrapper.style.top) wrapper.style.top = '20px';
+                if (btn) btn.innerHTML = '<i class="fa-solid fa-up-down-left-right mr-1"></i>Bebas';
+            }
+            handleEditorInput();
+        }
+
+        function resizeImage(imgId, size) {
+            playSynthesizedSound('system');
+            const img = document.getElementById(imgId);
+            if (img) {
+                const wrapper = img.closest('.image-wrapper');
+                const target = wrapper || img;
+                if (typeof size === 'number') {
+                    target.style.width = size + 'px';
+                } else {
+                    target.style.width = size;
+                }
+                handleEditorInput();
+            }
+        }
+
+        function changeImageScale(imgId, delta) {
+            playSynthesizedSound('system');
+            const img = document.getElementById(imgId);
+            if (img) {
+                const wrapper = img.closest('.image-wrapper');
+                const target = wrapper || img;
+                let currentWidth = target.offsetWidth || 300;
+                let newWidth = Math.max(50, currentWidth + delta);
+                target.style.width = newWidth + 'px';
+                handleEditorInput();
+            }
+        }
+
+        let activeDrag = null;
+        let longPressTimer = null;
+        let dragThresholdPassed = false;
+        let dragAnimationFrame = null;
+
+        document.addEventListener('mousedown', handlePointerDown);
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches && e.touches.length === 1) handlePointerDown(e.touches[0], e);
+        }, { passive: false });
+
+        function handlePointerDown(e, originalEvent = null) {
+            const target = e.target;
+            if (!target) return;
+
+            // Edge / Corner Resize handle drag
+            if (target.classList.contains('resize-handle')) {
+                if (originalEvent && originalEvent.cancelable) originalEvent.preventDefault();
+                const wrapper = target.closest('.image-wrapper');
+                if (!wrapper) return;
+                
+                activeDrag = {
+                    type: 'resize',
+                    wrapper: wrapper,
+                    handle: target.dataset.handle,
+                    startX: e.clientX,
+                    startY: e.clientY,
+                    startW: wrapper.offsetWidth,
+                    startH: wrapper.offsetHeight,
+                    startL: wrapper.offsetLeft,
+                    startT: wrapper.offsetTop
+                };
+                
+                document.addEventListener('mousemove', handlePointerMove);
+                document.addEventListener('mouseup', handlePointerUp);
+                document.addEventListener('touchmove', handleTouchMove, { passive: false });
+                document.addEventListener('touchend', handlePointerUp);
+                return;
+            }
+
+            // Image movement / dragging (via handle or holding down on the image directly)
+            const wrapper = target.closest('.image-wrapper');
+            const isImageClick = wrapper && (target.tagName === 'IMG' || target.classList.contains('image-drag-handle') || target === wrapper);
+            
+            if (isImageClick) {
+                const isHandle = target.classList.contains('image-drag-handle');
+
+                // Prevent native browser image drag ghost
+                if (target.tagName === 'IMG') {
+                    target.ondragstart = (evt) => evt.preventDefault();
+                }
+
+                if (originalEvent && originalEvent.cancelable) originalEvent.preventDefault();
+
+                dragThresholdPassed = isHandle; // Direct drag handle bypasses hold timer
+
+                activeDrag = {
+                    type: 'drag',
+                    wrapper: wrapper,
+                    startX: e.clientX,
+                    startY: e.clientY,
+                    startL: wrapper.offsetLeft || 0,
+                    startT: wrapper.offsetTop || 0
+                };
+
+                if (isHandle) {
+                    startImageDragMode(wrapper);
+                } else {
+                    // Visual hold indication on press-and-hold (180ms threshold)
+                    wrapper.classList.add('long-press-ready');
+                    clearTimeout(longPressTimer);
+                    longPressTimer = setTimeout(() => {
+                        if (activeDrag && activeDrag.wrapper === wrapper) {
+                            dragThresholdPassed = true;
+                            startImageDragMode(wrapper);
+                        }
+                    }, 180);
+                }
+
+                document.addEventListener('mousemove', handlePointerMove);
+                document.addEventListener('mouseup', handlePointerUp);
+                document.addEventListener('touchmove', handleTouchMove, { passive: false });
+                document.addEventListener('touchend', handlePointerUp);
+            }
+        }
+
+        function startImageDragMode(wrapper) {
+            if (!wrapper) return;
+            if (!wrapper.classList.contains('floating')) {
+                wrapper.classList.add('floating');
+                const btn = wrapper.querySelector('.btn-toggle-mode');
+                if (btn) btn.innerHTML = '<i class="fa-solid fa-up-down-left-right mr-1"></i>Bebas';
+            }
+            wrapper.classList.remove('long-press-ready');
+            wrapper.classList.add('is-dragging');
+            playSynthesizedSound('system');
+        }
+
+        function handleTouchMove(e) {
+            if (activeDrag && e.touches.length > 0) {
+                if (e.cancelable) e.preventDefault();
+                handlePointerMove(e.touches[0]);
+            }
+        }
+
+        function handlePointerMove(e) {
+            if (!activeDrag) return;
+
+            const dx = e.clientX - activeDrag.startX;
+            const dy = e.clientY - activeDrag.startY;
+
+            // Check drag threshold for instant response on mouse move (>4px)
+            if (!dragThresholdPassed && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
+                dragThresholdPassed = true;
+                clearTimeout(longPressTimer);
+                startImageDragMode(activeDrag.wrapper);
+            }
+
+            if (activeDrag.type === 'drag') {
+                if (!dragThresholdPassed) return;
+
+                if (dragAnimationFrame) cancelAnimationFrame(dragAnimationFrame);
+                dragAnimationFrame = requestAnimationFrame(() => {
+                    if (!activeDrag) return;
+                    const newLeft = Math.max(0, activeDrag.startL + dx);
+                    const newTop = Math.max(0, activeDrag.startT + dy);
+                    activeDrag.wrapper.style.left = newLeft + 'px';
+                    activeDrag.wrapper.style.top = newTop + 'px';
+                });
+            } else if (activeDrag.type === 'resize') {
+                const handle = activeDrag.handle;
+                let newW = activeDrag.startW;
+                let newH = activeDrag.startH;
+
+                if (handle.includes('e')) newW = Math.max(60, activeDrag.startW + dx);
+                if (handle.includes('s')) newH = Math.max(60, activeDrag.startH + dy);
+                if (handle.includes('w')) {
+                    const possibleW = activeDrag.startW - dx;
+                    if (possibleW > 60) {
+                        newW = possibleW;
+                        if (activeDrag.wrapper.classList.contains('floating')) {
+                            activeDrag.wrapper.style.left = (activeDrag.startL + dx) + 'px';
+                        }
+                    }
+                }
+                if (handle.includes('n')) {
+                    const possibleH = activeDrag.startH - dy;
+                    if (possibleH > 60) {
+                        newH = possibleH;
+                        if (activeDrag.wrapper.classList.contains('floating')) {
+                            activeDrag.wrapper.style.top = (activeDrag.startT + dy) + 'px';
+                        }
+                    }
+                }
+
+                activeDrag.wrapper.style.width = newW + 'px';
+            }
+        }
+
+        function handlePointerUp() {
+            clearTimeout(longPressTimer);
+            if (activeDrag) {
+                if (activeDrag.wrapper) {
+                    activeDrag.wrapper.classList.remove('is-dragging', 'long-press-ready');
+                }
+                activeDrag = null;
+                dragThresholdPassed = false;
+                document.removeEventListener('mousemove', handlePointerMove);
+                document.removeEventListener('mouseup', handlePointerUp);
+                document.removeEventListener('touchmove', handleTouchMove);
+                document.removeEventListener('touchend', handlePointerUp);
+                handleEditorInput();
+            }
+        }
+
+        function insertTextAtCursor(text) {
+            const editor = document.getElementById('editor');
+            editor.focus();
+            restoreEditorSelection();
+            document.execCommand('insertText', false, text);
+            handleEditorInput();
+        }
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            loadTabsFromStorage();
+            if (tabs.length === 0) {
+                addNewTab();
+            } else {
                 switchTab(tabs[0].id);
             }
-            lucide.createIcons();
-            updateLanguageUI();
 
-            // Bind confirmation action button
-            const confirmBtn = document.getElementById('confirm-modal-action-btn');
-            if (confirmBtn) {
-                confirmBtn.addEventListener('click', () => {
-                    if (pendingConfirmAction) {
-                        pendingConfirmAction();
-                    }
-                    closeConfirmModal();
-                });
-            }
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.relative')) {
+                    closeAllDropdowns();
+                }
+            });
 
-            // Global Keyboard Shortcuts (Ctrl+S, Ctrl+Alt+N)
-            window.addEventListener('keydown', (e) => {
+            // Shortcut listeners
+            document.addEventListener('keydown', (e) => {
                 if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
                     e.preventDefault();
                     saveFile();
-                } else if ((e.ctrlKey || e.metaKey) && e.altKey && e.key.toLowerCase() === 'n') {
-                    e.preventDefault();
-                    createNewTab();
                 }
+            });
+
+            // Restore saved theme, font, and custom background
+            const savedTheme = localStorage.getItem('coret_plus_theme') || 'polos';
+            const themeSelect = document.getElementById('theme-selector');
+            if (themeSelect) themeSelect.value = savedTheme;
+            changeTheme(savedTheme);
+
+            const savedBg = localStorage.getItem('coret_plus_custom_bg');
+            if (savedBg) setCustomBackground(savedBg);
+
+            const savedFont = localStorage.getItem('coret_plus_font');
+            if (savedFont) {
+                const fontSelect = document.getElementById('font-select');
+                if (fontSelect) fontSelect.value = savedFont;
+                changeFontFamily(savedFont);
+            }
+
+            // Sync toolbar block style with cursor selection
+            document.addEventListener('selectionchange', () => {
+                saveEditorSelection();
+                updateToolbarState();
+            });
+
+            // Save status input sound
+            document.getElementById('bg-url-input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') applyCustomBgUrl();
             });
         });
 
-        // Tab Handling Functions
-        function createNewTab(title = "") {
+        function closeAllDropdowns() {
+            document.querySelectorAll('#dropdown-file, #dropdown-edit, #dropdown-apps').forEach(d => d.classList.add('hidden'));
+        }
+
+        function saveEditorSelection() {
+            const sel = window.getSelection();
+            if (sel && sel.rangeCount > 0) {
+                const node = sel.anchorNode;
+                const editor = document.getElementById('editor');
+                if (editor && editor.contains(node)) {
+                    savedSelectionRange = sel.getRangeAt(0).cloneRange();
+                }
+            }
+        }
+
+        function restoreEditorSelection() {
+            if (savedSelectionRange) {
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(savedSelectionRange);
+            }
+        }
+
+        function loadTabsFromStorage() {
+            try {
+                const saved = localStorage.getItem('coret_plus_tabs');
+                if (saved) tabs = JSON.parse(saved);
+            } catch (e) {
+                tabs = [];
+            }
+        }
+
+        function saveTabsToStorage() {
+            try {
+                localStorage.setItem('coret_plus_tabs', JSON.stringify(tabs));
+            } catch (e) {}
+        }
+
+        function addNewTab() {
             playSynthesizedSound('system');
+            const id = 'tab_' + Date.now();
             const newTab = {
-                id: 'tab_' + Date.now(),
-                title: title,
+                id: id,
+                title: '',
                 content: ''
             };
             tabs.push(newTab);
             renderTabs();
-            switchTab(newTab.id);
-            saveToLocalStorage();
+            switchTab(id);
+            saveTabsToStorage();
         }
 
-        function switchTab(tabId) {
-            saveCurrentTabContent();
-            activeTabId = tabId;
-            const tab = tabs.find(t => t.id === tabId);
-            if (tab) {
-                document.getElementById('note-title-input').value = tab.title || '';
-                document.getElementById('editor').innerHTML = tab.content;
-            }
+        function switchTab(id) {
+            playSynthesizedSound('system');
+            activeTabId = id;
+            const tab = tabs.find(t => t.id === id);
+            if (!tab) return;
+
+            document.getElementById('note-title-input').value = tab.title || '';
+            document.getElementById('editor').innerHTML = tab.content || '';
+            
             renderTabs();
-            updateCounts();
+            updateStats();
         }
 
-        function closeTab(tabId, event) {
-            event.stopPropagation();
-            if (tabs.length <= 1) {
-                // Keep at least one tab open
-                tabs = [];
-                createNewTab("");
-                return;
+        function closeTab(id, e) {
+            if (e) e.stopPropagation();
+            playSynthesizedSound('system');
+            
+            tabs = tabs.filter(t => t.id !== id);
+            if (tabs.length === 0) {
+                addNewTab();
+            } else if (activeTabId === id) {
+                switchTab(tabs[tabs.length - 1].id);
+            } else {
+                renderTabs();
             }
-            tabs = tabs.filter(t => t.id !== tabId);
-            if (activeTabId === tabId) {
-                activeTabId = tabs[tabs.length - 1].id;
-            }
-            renderTabs();
-            switchTab(activeTabId);
-            saveToLocalStorage();
+            saveTabsToStorage();
         }
 
         function renderTabs() {
-            const tabBar = document.getElementById('tab-bar');
-            tabBar.innerHTML = '';
-            const defaultTabTitle = currentLanguage === 'id' ? 'Catatan Baru' : 'New Note';
+            const container = document.getElementById('tab-container');
+            container.innerHTML = '';
+
             tabs.forEach(tab => {
                 const isActive = tab.id === activeTabId;
+                const displayTitle = tab.title.trim() ? tab.title : i18nDict[currentLang].defaultNoteTitle;
+
                 const tabEl = document.createElement('div');
-                tabEl.className = `flex items-center gap-2 px-3 py-1.5 rounded-t-md text-xs cursor-pointer select-none border-t border-x transition-all ${
+                tabEl.className = `flex items-center space-x-2 px-3 py-1.5 rounded-t-lg text-xs font-medium border-t border-x cursor-pointer transition-colors max-w-[160px] group ${
                     isActive 
-                        ? 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-indigo-600 dark:text-indigo-400 font-semibold' 
-                        : 'bg-gray-100 dark:bg-gray-900 border-transparent text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800'
+                    ? 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-indigo-600 dark:text-indigo-400 shadow-sm' 
+                    : 'bg-gray-100 dark:bg-gray-900/50 border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-gray-300'
                 }`;
                 tabEl.onclick = () => switchTab(tab.id);
 
                 tabEl.innerHTML = `
-                    <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
-                    <span class="max-w-[100px] truncate">${escapeHtml(tab.title || defaultTabTitle)}</span>
-                    <button onclick="closeTab('${tab.id}', event)" class="hover:text-red-500 rounded p-0.5">
-                        <i data-lucide="x" class="w-3 h-3"></i>
+                    <i class="fa-regular fa-file-lines text-xs"></i>
+                    <span class="truncate flex-1">${escapeHtml(displayTitle)}</span>
+                    <button onclick="closeTab('${tab.id}', event)" class="opacity-0 group-hover:opacity-100 hover:bg-gray-200 dark:hover:bg-gray-700 p-0.5 rounded transition-opacity">
+                        <i class="fa-solid fa-xmark text-[10px]"></i>
                     </button>
                 `;
-                tabBar.appendChild(tabEl);
+
+                container.appendChild(tabEl);
             });
-            lucide.createIcons();
         }
 
-        function updateTabTitle(newTitle) {
+        function handleTitleInput(val) {
             const tab = tabs.find(t => t.id === activeTabId);
             if (tab) {
-                tab.title = newTitle;
+                tab.title = val;
                 renderTabs();
-                saveToLocalStorage();
-            }
-        }
-
-        function saveCurrentTabContent() {
-            if (!activeTabId) return;
-            const tab = tabs.find(t => t.id === activeTabId);
-            if (tab) {
-                tab.content = document.getElementById('editor').innerHTML;
+                saveTabsToStorage();
             }
         }
 
         function handleEditorInput() {
             playSynthesizedSound('type');
-            saveCurrentTabContent();
-            updateCounts();
-            saveToLocalStorage();
+            const tab = tabs.find(t => t.id === activeTabId);
+            if (tab) {
+                tab.content = document.getElementById('editor').innerHTML;
+                saveTabsToStorage();
+            }
+            updateStats();
         }
 
         function execCmd(command, value = null) {
             playSynthesizedSound('system');
-            document.execCommand(command, false, value);
             document.getElementById('editor').focus();
-        }
-
-        function toggleCaseTransform() {
-            const selection = window.getSelection();
-            if (!selection.rangeCount) return;
-            const text = selection.toString();
-            if (!text) return;
-
-            const isUpper = text === text.toUpperCase();
-            const transformed = isUpper ? text.toLowerCase() : text.toUpperCase();
-            document.execCommand('insertText', false, transformed);
-            playSynthesizedSound('system');
-        }
-
-        function clearFormatting() {
-            playSynthesizedSound('system');
-            const selection = window.getSelection();
-            if (!selection || !selection.rangeCount) return;
-
-            const editor = document.getElementById('editor');
-            const range = selection.getRangeAt(0);
-
-            // Reset style block format back to paragraph (Body)
-            try {
-                document.execCommand('formatBlock', false, '<p>');
-                const styleSelect = document.getElementById('text-style-select');
-                if (styleSelect) styleSelect.value = 'p';
-            } catch (e) {}
-
-            if (selection.isCollapsed) {
-                // Jika tidak ada teks yang diblok/diseleksi, hapus elemen format di posisi kursor
-                let node = selection.anchorNode;
-                if (node) {
-                    let current = node.nodeType === 3 ? node.parentElement : node;
-                    while (current && current !== editor) {
-                        if (['SPAN', 'FONT', 'B', 'I', 'U', 'S', 'STRIKE', 'EM', 'STRONG'].includes(current.tagName)) {
-                            const parent = current.parentNode;
-                            while (current.firstChild) {
-                                parent.insertBefore(current.firstChild, current);
-                            }
-                            parent.removeChild(current);
-                            current = parent;
-                        } else {
-                            current.removeAttribute('style');
-                            current.removeAttribute('class');
-                            current = current.parentElement;
-                        }
-                    }
-                }
-            } else {
-                // Jika ada teks yang diseleksi, bersihkan semua tag format & inline style
-                try {
-                    document.execCommand('removeFormat', false, null);
-                    document.execCommand('unlink', false, null);
-
-                    const extracted = range.extractContents();
-                    const container = document.createElement('div');
-                    container.appendChild(extracted);
-
-                    function cleanNode(node) {
-                        if (node.nodeType === 1) {
-                            node.removeAttribute('style');
-                            node.removeAttribute('class');
-                            node.removeAttribute('size');
-                            node.removeAttribute('color');
-
-                            const unwrapTags = ['SPAN', 'FONT', 'B', 'I', 'U', 'S', 'STRIKE', 'EM', 'STRONG', 'MARK'];
-                            if (unwrapTags.includes(node.tagName)) {
-                                const parent = node.parentNode;
-                                while (node.firstChild) {
-                                    cleanNode(node.firstChild);
-                                    parent.insertBefore(node.firstChild, node);
-                                }
-                                parent.removeChild(node);
-                                return;
-                            }
-                        }
-                        let child = node.firstChild;
-                        while (child) {
-                            const next = child.nextSibling;
-                            cleanNode(child);
-                            child = next;
-                        }
-                    }
-
-                    cleanNode(container);
-
-                    const frag = document.createDocumentFragment();
-                    while (container.firstChild) {
-                        frag.appendChild(container.firstChild);
-                    }
-
-                    range.insertNode(frag);
-                    selection.removeAllRanges();
-                } catch (e) {
-                    document.execCommand('removeFormat', false, null);
-                }
-            }
-
-            editor.focus();
+            restoreEditorSelection();
+            document.execCommand(command, false, value);
+            saveEditorSelection();
             handleEditorInput();
         }
 
-        function insertChecklist() {
-            playSynthesizedSound('checklist');
-            const checklistHtml = `<div class="flex items-center space-x-2 my-1" contenteditable="false">
-                <input type="checkbox" onchange="playSynthesizedSound('checklist')" class="w-4 h-4 text-indigo-600 rounded cursor-pointer">
-                <span contenteditable="true" class="focus:outline-none flex-1">Item Checklist</span>
-            </div>&nbsp;`;
-            document.execCommand('insertHTML', false, checklistHtml);
-        }
-
-        function clearAllText() {
-            const isId = currentLanguage === 'id';
-            showConfirmModal(
-                isId ? 'Hapus Semua Teks' : 'Clear All Text',
-                isId ? 'Apakah Anda yakin ingin menghapus seluruh teks pada catatan ini?' : 'Are you sure you want to clear all text in this note?',
-                isId ? 'Hapus' : 'Clear',
-                () => {
-                    playSynthesizedSound('clear');
-                    document.getElementById('editor').innerHTML = '';
-                    saveCurrentTabContent();
-                    updateCounts();
-                    saveToLocalStorage();
-                }
-            );
-        }
-
-        function updateCounts() {
-            const text = document.getElementById('editor').innerText || '';
-            const charCount = text.length;
-            const wordCount = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
-
-            const dict = i18nDict[currentLanguage];
-            document.getElementById('char-count').innerText = `${dict.chars}${charCount}`;
-            document.getElementById('word-count').innerText = `${dict.words}${wordCount}`;
-        }
-
-        function changeFontFamily(fontClass) {
-            currentFont = fontClass;
-            const editor = document.getElementById('editor');
-            editor.className = editor.className.replace(/font-\w+/g, '');
-            editor.classList.add(fontClass);
+        function changeBlockStyle(tagName) {
             playSynthesizedSound('system');
-            saveSettings();
+            const editor = document.getElementById('editor');
+            editor.focus();
+            restoreEditorSelection();
+
+            const formatTag = (tagName === 'p') ? 'p' : tagName;
+            
+            try {
+                document.execCommand('formatBlock', false, `<${formatTag}>`);
+            } catch(e) {
+                try {
+                    document.execCommand('formatBlock', false, formatTag);
+                } catch(err) {
+                    // Fallback execution
+                }
+            }
+            saveEditorSelection();
+            handleEditorInput();
+        }
+
+        function updateToolbarState() {
+            const selection = window.getSelection();
+            if (!selection || !selection.rangeCount) return;
+            const node = selection.anchorNode;
+            if (!node || !document.getElementById('editor').contains(node)) return;
+
+            let parent = node.nodeType === 3 ? node.parentNode : node;
+            while (parent && parent !== document.getElementById('editor')) {
+                const tag = parent.tagName ? parent.tagName.toLowerCase() : '';
+                if (['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p'].includes(tag)) {
+                    const styleSelect = document.getElementById('text-style-select');
+                    if (styleSelect) styleSelect.value = tag;
+                    break;
+                }
+                parent = parent.parentNode;
+            }
+        }
+
+        function changeFontFamily(className) {
+            playSynthesizedSound('system');
+            const editor = document.getElementById('editor');
+            const fontClasses = ['font-modern', 'font-klasik', 'font-italic', 'font-elegan', 'font-cartoon', 'font-tangan'];
+            fontClasses.forEach(c => editor.classList.remove(c));
+            if (className) editor.classList.add(className);
+            localStorage.setItem('coret_plus_font', className);
         }
 
         function changeFontSize(size) {
@@ -897,307 +1803,279 @@
             handleEditorInput();
         }
 
-        function changeBlockStyle(tagName) {
+        function changeFontColor(color) {
             playSynthesizedSound('system');
-            if (!tagName) return;
-            try {
-                // Applying Heading block format (H1, H2, H3, H4, H5, H6, P)
-                document.execCommand('formatBlock', false, `<${tagName}>`);
-            } catch (e) {
-                try {
-                    document.execCommand('formatBlock', false, tagName);
-                } catch (err) {
-                    console.error('Error changing text style block:', err);
-                }
-            }
-            document.getElementById('editor').focus();
+            execCmd('foreColor', color);
+            const indicator = document.getElementById('font-color-indicator');
+            if (indicator) indicator.style.backgroundColor = color;
+            const picker = document.getElementById('font-color-picker');
+            if (picker) picker.value = color;
+        }
+
+        function toggleCase() {
+            playSynthesizedSound('system');
+            const selection = window.getSelection();
+            if (!selection.rangeCount || selection.isCollapsed) return;
+
+            const selectedText = selection.toString();
+            const upper = selectedText.toUpperCase();
+            const lower = selectedText.toLowerCase();
+            
+            const newText = (selectedText === upper) ? lower : upper;
+            document.execCommand('insertText', false, newText);
             handleEditorInput();
         }
 
-        function changeTheme(themeClass) {
-            currentTheme = themeClass;
-            const wrapper = document.getElementById('paper-editor-wrapper');
-            wrapper.className = wrapper.className.replace(/theme-\w+/g, '');
-            wrapper.classList.add(themeClass);
+        function clearFormatting() {
             playSynthesizedSound('system');
-            saveSettings();
+            const selection = window.getSelection();
+            if (!selection.rangeCount || selection.isCollapsed) {
+                document.execCommand('removeFormat', false, null);
+                return;
+            }
+
+            const range = selection.getRangeAt(0);
+            const fragment = range.extractContents();
+
+            // Strip styling tags
+            function cleanNodes(node) {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    node.removeAttribute('style');
+                    node.removeAttribute('class');
+                    node.removeAttribute('color');
+                    node.removeAttribute('face');
+                    node.removeAttribute('size');
+                }
+                for (let child of Array.from(node.childNodes)) {
+                    cleanNodes(child);
+                }
+            }
+
+            cleanNodes(fragment);
+            range.insertNode(fragment);
+            document.execCommand('formatBlock', false, '<p>');
+            handleEditorInput();
         }
 
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-            playSynthesizedSound('system');
-            saveSettings();
+        function insertChecklist() {
+            playSynthesizedSound('checklist');
+            const editor = document.getElementById('editor');
+            const item = document.createElement('div');
+            item.className = 'checklist-item flex items-center space-x-2 my-1';
+            item.contentEditable = 'false';
+
+            item.innerHTML = `
+                <input type="checkbox" onchange="toggleChecklistItem(this)" class="rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer">
+                <span contenteditable="true" onkeydown="handleChecklistKeyDown(event, this)" oninput="handleEditorInput()" class="checklist-text outline-none flex-1">Item checklist...</span>
+                <button onclick="this.parentElement.remove(); handleEditorInput();" class="text-red-400 hover:text-red-600 px-1" title="Hapus">
+                    <i class="fa-solid fa-trash-can text-xs"></i>
+                </button>
+            `;
+
+            editor.appendChild(item);
+            const textSpan = item.querySelector('.checklist-text');
+            textSpan.focus();
+            handleEditorInput();
         }
 
-        function applyCustomBg(url) {
-            customBgUrl = url;
-            const overlay = document.getElementById('custom-bg-overlay');
-            if (url) {
-                overlay.style.backgroundImage = `url('${url}')`;
-                overlay.classList.remove('hidden');
+        function toggleChecklistItem(checkbox) {
+            playSynthesizedSound('checklist');
+            const text = checkbox.nextElementSibling;
+            if (checkbox.checked) {
+                text.classList.add('line-through', 'opacity-50');
             } else {
-                overlay.classList.add('hidden');
+                text.classList.remove('line-through', 'opacity-50');
             }
-            saveSettings();
+            handleEditorInput();
         }
 
-        function saveCustomBgUrl() {
-            const url = document.getElementById('bg-url-input').value.trim();
-            applyCustomBg(url);
-            playSynthesizedSound('system');
-        }
-
-        function handleBgFileUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const dataUrl = e.target.result;
-                    document.getElementById('bg-url-input').value = '';
-                    applyCustomBg(dataUrl);
-                };
-                reader.readAsDataURL(file);
+        function handleChecklistKeyDown(e, element) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                insertChecklist();
+            } else if (e.key === 'Backspace' && element.innerText.trim() === '') {
+                e.preventDefault();
+                const parent = element.parentElement;
+                parent.remove();
+                handleEditorInput();
             }
-        }
-
-        function removeCustomBg() {
-            document.getElementById('bg-url-input').value = '';
-            applyCustomBg('');
         }
 
         async function saveFile() {
-            saveCurrentTabContent();
-            saveToLocalStorage();
             playSynthesizedSound('system');
+            const tab = tabs.find(t => t.id === activeTabId);
+            if (!tab) return;
 
-            const currentTab = tabs.find(t => t.id === activeTabId);
-            if (!currentTab) return;
+            const content = document.getElementById('editor').innerText;
+            const filename = (tab.title.trim() || 'catatan') + '.txt';
 
-            // Jika berkas sudah memiliki fileHandle lokasi penyimpanan sebelumnya di File Manager
-            if (currentTab.fileHandle) {
-                try {
-                    const textContent = document.getElementById('editor').innerText;
-                    const writable = await currentTab.fileHandle.createWritable();
-                    await writable.write(textContent);
-                    await writable.close();
-                    showSaveNotification(currentLanguage === 'id' ? 'Tersimpan ke Berkas!' : 'Saved to File!');
-                    return;
-                } catch (err) {
-                    console.warn('Gagal menyimpan ke lokasi file lama, membukakan dialog simpan baru:', err);
-                    currentTab.fileHandle = null;
-                }
-            }
-
-            // Jika belum memiliki lokasi file simpan, jalankan Save As ke File Manager Perangkat
-            await saveFileAs();
-        }
-
-        async function saveFileAs() {
-            saveCurrentTabContent();
-            saveToLocalStorage();
-            playSynthesizedSound('system');
-
-            const currentTab = tabs.find(t => t.id === activeTabId);
-            const textContent = document.getElementById('editor').innerText;
-            const defaultName = currentLanguage === 'id' ? 'Catatan Baru' : 'New Note';
-            const filename = ((currentTab && currentTab.title) ? currentTab.title : defaultName) + '.txt';
-
-            // Menggunakan File System Access API agar pengguna memilih folder di File Manager PC/Perangkat
-            if ('showSaveFilePicker' in window) {
-                try {
-                    const handle = await window.showSaveFilePicker({
+            try {
+                if ('showSaveFilePicker' in window) {
+                    const opts = {
                         suggestedName: filename,
                         types: [{
-                            description: 'Dokumen Teks (*.txt)',
+                            description: 'Text Files',
                             accept: { 'text/plain': ['.txt', '.md'] },
                         }],
-                    });
+                    };
+                    const handle = await window.showSaveFilePicker(opts);
                     const writable = await handle.createWritable();
-                    await writable.write(textContent);
+                    await writable.write(content);
                     await writable.close();
-                    
-                    // Menyimpan acuan lokasi berkas pada memori tab agar Ctrl+S selanjutnya langsung update file ini
-                    if (currentTab) {
-                        currentTab.fileHandle = handle;
-                        if (handle.name) {
-                            const cleanName = handle.name.replace(/\.[^/.]+$/, "");
-                            currentTab.title = cleanName;
-                            document.getElementById('note-title-input').value = cleanName;
-                            renderTabs();
-                            saveToLocalStorage();
-                        }
-                    }
-
-                    showSaveNotification(currentLanguage === 'id' ? 'Berhasil disimpan ke folder!' : 'Saved to folder!');
-                    return;
-                } catch (err) {
-                    if (err.name === 'AbortError') return; // Pengguna membatalkan dialog pemilihan
-                    console.warn('File System Access API tidak didukung/diizinkan, beralih ke pengunduhan berkas:', err);
+                } else {
+                    // Fallback download
+                    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = filename;
+                    a.click();
+                    URL.revokeObjectURL(a.href);
                 }
-            }
-
-            // Fallback untuk browser/HP yang tidak mendukung showSaveFilePicker
-            const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = filename;
-            a.click();
-            URL.revokeObjectURL(a.href);
-            showSaveNotification(currentLanguage === 'id' ? 'Berkas Diunduh ke Perangkat!' : 'Downloaded to Device!');
-        }
-
-        function showSaveNotification(msg) {
-            const status = document.getElementById('save-status');
-            if (status) {
-                status.innerHTML = `<i data-lucide="check-circle-2" class="w-3 h-3"></i> ${msg}`;
-                lucide.createIcons();
-                status.classList.remove('opacity-0');
-                setTimeout(() => {
-                    status.classList.add('opacity-0');
-                }, 2500);
+                showSaveStatus();
+            } catch (err) {
+                // User cancelled or save error
             }
         }
 
-        function exitApp() {
-            const isId = currentLanguage === 'id';
-            showConfirmModal(
-                isId ? 'Tutup Aplikasi' : 'Exit App',
-                isId ? 'Apakah Anda yakin ingin menutup aplikasi CORET+?' : 'Are you sure you want to exit CORET+?',
-                isId ? 'Keluar' : 'Exit',
-                () => {
-                    playSynthesizedSound('system');
-                    const exitOverlay = document.getElementById('exit-overlay');
-                    if (exitOverlay) {
-                        const titleEl = document.getElementById('exit-overlay-title');
-                        const descEl = document.getElementById('exit-overlay-desc');
-                        const hintEl = document.getElementById('exit-overlay-hint');
-                        if (titleEl) titleEl.innerText = isId ? 'CORET+ Telah Ditutup' : 'CORET+ Closed';
-                        if (descEl) descEl.innerText = isId ? 'Klik di mana saja untuk membuka kembali aplikasi.' : 'Click anywhere to reopen the app.';
-                        if (hintEl) hintEl.innerText = isId ? 'Klik Sembarang Tempat Untuk Kembali' : 'Click Anywhere To Return';
-                        exitOverlay.classList.remove('hidden');
-                        lucide.createIcons();
-                    }
-                }
-            );
+        function showSaveStatus() {
+            const el = document.getElementById('save-status');
+            el.style.opacity = '1';
+            setTimeout(() => {
+                el.style.opacity = '0.7';
+            }, 2000);
         }
 
-        function restoreApp() {
+        function toggleDropdown(id) {
             playSynthesizedSound('system');
-            const exitOverlay = document.getElementById('exit-overlay');
-            if (exitOverlay) {
-                exitOverlay.classList.add('hidden');
+            const el = document.getElementById(id);
+            const isHidden = el.classList.contains('hidden');
+            closeAllDropdowns();
+            if (isHidden) el.classList.remove('hidden');
+        }
+
+        function closeAllDropdowns() {
+            document.querySelectorAll('#dropdown-file, #dropdown-edit, #dropdown-apps').forEach(d => d.classList.add('hidden'));
+        }
+
+        function toggleDarkMode() {
+            playSynthesizedSound('system');
+            document.documentElement.classList.toggle('dark');
+        }
+
+        function changeTheme(themeName) {
+            playSynthesizedSound('system');
+            const editor = document.getElementById('editor');
+            const themeClasses = ['theme-polos', 'theme-buku', 'theme-kusut', 'theme-kuno', 'theme-papan'];
+            themeClasses.forEach(c => editor.classList.remove(c));
+            editor.classList.add(`theme-${themeName}`);
+            localStorage.setItem('coret_plus_theme', themeName);
+        }
+
+        function applyCustomBgUrl() {
+            const url = document.getElementById('bg-url-input').value.trim();
+            if (url) {
+                playSynthesizedSound('system');
+                setCustomBackground(url);
             }
         }
 
-        function toggleSettingsModal(show) {
-            playSynthesizedSound('system');
-            const modal = document.getElementById('settings-modal');
-            if (show) modal.classList.remove('hidden');
-            else modal.classList.add('hidden');
+        function applyCustomBgFile(input) {
+            if (input.files && input.files[0]) {
+                playSynthesizedSound('system');
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    setCustomBackground(e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
-        function changeLanguage(lang) {
-            currentLanguage = lang;
-            updateLanguageUI();
-            playSynthesizedSound('system');
-            saveSettings();
+        function setCustomBackground(bgData) {
+            const card = document.getElementById('note-card');
+            const editor = document.getElementById('editor');
+            card.style.backgroundImage = `url('${bgData}')`;
+            card.style.backgroundSize = 'cover';
+            card.style.backgroundPosition = 'center';
+            editor.classList.add('has-custom-bg');
+            try {
+                localStorage.setItem('coret_plus_custom_bg', bgData);
+            } catch(e) {}
         }
 
-        function updateLanguageUI() {
-            const dict = i18nDict[currentLanguage];
+        function removeCustomBg() {
+            playSynthesizedSound('system');
+            const card = document.getElementById('note-card');
+            const editor = document.getElementById('editor');
+            card.style.backgroundImage = '';
+            editor.classList.remove('has-custom-bg');
+            document.getElementById('bg-url-input').value = '';
+            localStorage.removeItem('coret_plus_custom_bg');
+        }
+
+        function openSettingsModal() {
+            playSynthesizedSound('system');
+            document.getElementById('settings-modal').classList.remove('hidden');
+        }
+
+        function closeSettingsModal() {
+            playSynthesizedSound('system');
+            document.getElementById('settings-modal').classList.add('hidden');
+        }
+
+        function confirmClearAll() {
+            playSynthesizedSound('system');
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            playSynthesizedSound('system');
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+
+        function executeClearAll() {
+            playSynthesizedSound('clear');
+            document.getElementById('editor').innerHTML = '';
+            handleEditorInput();
+            closeConfirmModal();
+        }
+
+        function triggerExit() {
+            playSynthesizedSound('system');
+            document.getElementById('exit-overlay').classList.remove('hidden');
+        }
+
+        function resumeFromExit() {
+            playSynthesizedSound('system');
+            document.getElementById('exit-overlay').classList.add('hidden');
+        }
+
+        function setLanguage(lang) {
+            playSynthesizedSound('system');
+            currentLang = lang;
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (dict[key]) {
-                    el.innerText = dict[key];
+                if (i18nDict[lang] && i18nDict[lang][key]) {
+                    if (el.tagName === 'INPUT' && el.type === 'placeholder') {
+                        el.placeholder = i18nDict[lang][key];
+                    } else {
+                        el.innerText = i18nDict[lang][key];
+                    }
                 }
             });
-            const inputEl = document.getElementById('note-title-input');
-            if (inputEl) {
-                inputEl.placeholder = dict.defaultNoteTitle;
-            }
             renderTabs();
-            updateCounts();
         }
 
-        function saveToLocalStorage() {
-            localStorage.setItem('coret_tabs', JSON.stringify(tabs));
-            localStorage.setItem('coret_active_tab', activeTabId);
+        function updateStats() {
+            const text = document.getElementById('editor').innerText || '';
+            const chars = text.replace(/\s/g, '').length;
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+            document.getElementById('char-count').innerText = chars;
+            document.getElementById('word-count').innerText = words;
         }
 
-        function saveSettings() {
-            const settings = {
-                soundType: document.getElementById('sound-type').checked,
-                soundClear: document.getElementById('sound-clear').checked,
-                soundChecklist: document.getElementById('sound-checklist').checked,
-                soundSystem: document.getElementById('sound-system').checked,
-                customBgUrl: customBgUrl,
-                theme: currentTheme,
-                font: currentFont,
-                lang: currentLanguage,
-                isDark: document.documentElement.classList.contains('dark')
-            };
-            localStorage.setItem('coret_settings', JSON.stringify(settings));
-        }
-
-        function loadSavedState() {
-            // Load Tabs
-            const savedTabs = localStorage.getItem('coret_tabs');
-            if (savedTabs) {
-                try { tabs = JSON.parse(savedTabs); } catch (e) { tabs = []; }
-            }
-            const savedActiveId = localStorage.getItem('coret_active_tab');
-            if (savedActiveId && tabs.some(t => t.id === savedActiveId)) {
-                activeTabId = savedActiveId;
-            }
-
-            // Load Settings
-            const savedSettings = localStorage.getItem('coret_settings');
-            if (savedSettings) {
-                try {
-                    const s = JSON.parse(savedSettings);
-                    document.getElementById('sound-type').checked = s.soundType ?? true;
-                    document.getElementById('sound-clear').checked = s.soundClear ?? true;
-                    document.getElementById('sound-checklist').checked = s.soundChecklist ?? true;
-                    document.getElementById('sound-system').checked = s.soundSystem ?? true;
-                    
-                    if (s.customBgUrl) {
-                        applyCustomBg(s.customBgUrl);
-                        document.getElementById('bg-url-input').value = s.customBgUrl;
-                    }
-
-                    if (s.theme) {
-                        changeTheme(s.theme);
-                        document.getElementById('theme-select').value = s.theme;
-                    }
-
-                    if (s.font) {
-                        changeFontFamily(s.font);
-                        document.getElementById('font-family-select').value = s.font;
-                    }
-
-                    if (s.lang) {
-                        currentLanguage = s.lang;
-                        document.getElementById('lang-select').value = s.lang;
-                    }
-
-                    if (s.isDark) {
-                        document.documentElement.classList.add('dark');
-                    }
-                } catch (e) {}
-            }
-        }
-
-        // Helper Utility
-        function escapeHtml(text) {
-            return text.replace(/[&<>"']/g, function(m) {
-                return {
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;',
-                    "'": '&#039;'
-                }[m];
-            });
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
         }
     </script>
 </body>
